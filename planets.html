@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Planets</title>
+        <style>
+            canvas { width: 100%; height: 100% }
+            body{
+                background-image: url('stars2.jpg');
+            }
+        </style>
+
+    </head>
+    <body>
+        <script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+        <script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            //the sun
+            var sun_geometry = new THREE.SphereGeometry(80, 16, 16);
+            var texture = new THREE.ImageUtils.loadTexture("sun.png");
+            var sun_material = new THREE.MeshBasicMaterial({map: texture});
+            var my_sun = new THREE.Mesh(sun_geometry, sun_material);
+            scene.add(my_sun);
+
+            //the red planet
+            var planet_geometry = new THREE.SphereGeometry(10, 16, 16);
+            var texture = new THREE.ImageUtils.loadTexture("planet.jpg");
+            var planet_material = new THREE.MeshBasicMaterial({map: texture});
+            var planet = new THREE.Mesh(planet_geometry, planet_material);
+            scene.add(planet);
+
+            //the blue planet
+            var bplanet_geometry = new THREE.SphereGeometry(30, 16, 16);
+            var texture = new THREE.ImageUtils.loadTexture("bplanet.jpg");
+            var bplanet_material = new THREE.MeshBasicMaterial({map: texture});
+            var bplanet = new THREE.Mesh(bplanet_geometry, bplanet_material);
+            scene.add(bplanet);
+
+            camera.position.z = 400;
+            camera.lookAt(new THREE.Vector3(0,0,0));
+           
+
+            //move red planet out
+            var translate_mtx = new THREE.Matrix4();
+            translate_mtx.makeTranslation(100, -45, 0);
+            planet.applyMatrix(translate_mtx);
+
+            //move blue planet out
+            var translate_mtx = new THREE.Matrix4();
+            translate_mtx.makeTranslation(200, -75, 0);
+            bplanet.applyMatrix(translate_mtx);
+            
+            //make red planet orbit
+            var rot_mtx = new THREE.Matrix4();
+            var angle_x = 0.01;
+            rot_mtx.makeRotationAxis(new THREE.Vector3(0.5, 1, 0.1), angle_x);
+
+            //make blue planet orbit
+            var b_rot_mtx = new THREE.Matrix4();
+            var b_angle_x = 0.005;
+            b_rot_mtx.makeRotationAxis(new THREE.Vector3(0.5, 1, 0.1), b_angle_x);
+
+          
+            //this creates a loop that runs every 60th of a sec
+            //this applies the rotation matrix each time to the sun and the planet
+            function render(){
+                requestAnimationFrame(render); 
+                planet.applyMatrix(rot_mtx);
+                bplanet.applyMatrix(b_rot_mtx);
+                my_sun.rotation.y += 0.001;
+                // camera.position.x += 0.1;
+                // camera.position.z -= 0.1;
+                renderer.render(scene, camera);
+            }
+            render();
+          
+
+
+        </script>
+    </body>
+</html>
