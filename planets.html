@@ -23,34 +23,43 @@
                 return [scene, renderer, camera]
             }
             
+            function aPlanet(radius, image, distFromSun, angleOfRot){
+                this.radius = radius;
+                this.image = image;
+                this.distFromSun = distFromSun;
+                this.angleOfRot = angleOfRot;
+                
+            }
+             
+
             //make a planet or sun
-            function buildPlanet(radius, image){
-                var geometry = new THREE.SphereGeometry(radius, 16, 16);
-                var texture = new THREE.ImageUtils.loadTexture(image);
+            function buildPlanet(aPlanet){
+                var geometry = new THREE.SphereGeometry(aPlanet.radius, 16, 16);
+                var texture = new THREE.ImageUtils.loadTexture(aPlanet.image);
                 var material = new THREE.MeshBasicMaterial({map: texture});
-                var planet = new THREE.Mesh(geometry, material);
-                scene.add(planet);
-                return planet
+                var planetGeom = new THREE.Mesh(geometry, material);
+                scene.add(planetGeom);
+                return planetGeom
             }
 
-            function rotatePlanetMatrix(angle){
+            function rotatePlanetMatrix(aPlanet){
                 rot_mtx = new THREE.Matrix4;
-                rot_mtx.makeRotationAxis(axis, angle);
+                rot_mtx.makeRotationAxis(axis, aPlanet.angleOfRot);
                 return rot_mtx;
             }
 
-            function setPosition(planet, startingPoint){
+            function setPosition(planetGeom, aPlanet){
                 //set the red planet to a start position 
 
-                planet.position.x = startingPoint[0];
-                planet.position.y = startingPoint[1];
-                planet.position.z = startingPoint[2];
+                planetGeom.position.x = aPlanet.distFromSun;
+                planetGeom.position.y = aPlanet.distFromSun*-0.5;
+                planetGeom.position.z = 0;
             }
 
-            function orbitPlanet(angle, distFromSun){
-                x_direction = distFromSun*Math.cos(angle)*0.8945 + distFromSun*Math.sin(angle)*-0.412;
-                y_direction = distFromSun*Math.cos(angle)*-0.472 + distFromSun*Math.sin(angle)*-0.0799;
-                z_direction = distFromSun*Math.cos(angle)*0 + distFromSun*Math.sin(angle)*1.009;
+            function orbitPlanet(aPlanet){
+                x_direction = aPlanet.distFromSun*Math.cos(aPlanet.angleOfRot)*0.8945 + aPlanet.distFromSun*Math.sin(aPlanet.angleOfRot)*-0.412;
+                y_direction = aPlanet.distFromSun*Math.cos(aPlanet.angleOfRot)*-0.472 + aPlanet.distFromSun*Math.sin(aPlanet.angleOfRot)*-0.0799;
+                z_direction = aPlanet.distFromSun*Math.cos(aPlanet.angleOfRot)*0 + aPlanet.distFromSun*Math.sin(aPlanet.angleOfRot)*1.009;
                 return [x_direction, y_direction, z_direction];
             }
 
@@ -58,22 +67,22 @@
             //this creates a loop that runs every 60th of a sec
             function render(){
                 //spin each planet and sun 
-                planet.applyMatrix(redRotationMatrix);
-                bPlanet.applyMatrix(blueRotationMatrix);
-                mySun.applyMatrix(sunRotationMatrix);
+                planetGeom.applyMatrix(redRotationMatrix);
+                bPlanetGeom.applyMatrix(blueRotationMatrix);
+                mySunGeom.applyMatrix(sunRotationMatrix);
                 
                 //orbit each planet
-                redAngle += 0.01;
-                directions = orbitPlanet(redAngle, 100);
-                planet.position.x = directions[0];
-                planet.position.y = directions[1];
-                planet.position.z = directions[2];
+                planet.angleOfRot += 0.01;
+                directions = orbitPlanet(planet);
+                planetGeom.position.x = directions[0];
+                planetGeom.position.y = directions[1];
+                planetGeom.position.z = directions[2];
 
-                blueAngle += 0.005;
-                directions = orbitPlanet(blueAngle, 200);
-                bPlanet.position.x = directions[0];
-                bPlanet.position.y = directions[1];
-                bPlanet.position.z = directions[2];
+                bPlanet.angleOfRot += 0.005;
+                directions = orbitPlanet(bPlanet);
+                bPlanetGeom.position.x = directions[0];
+                bPlanetGeom.position.y = directions[1];
+                bPlanetGeom.position.z = directions[2];
             
                 renderer.render(scene, camera);
 
@@ -87,32 +96,33 @@
             var renderer = sceneRendererCamera[1];
             var camera = sceneRendererCamera[2];
 
-            //build planets
+            //aPlanet(radius, image, distFromSun, angleOfRot)
             sunImage = "sun.png";
-            var mySun = buildPlanet(80, sunImage);
+            sunAngle = 0.001;
+            var mySun = new aPlanet(80, sunImage, 0, sunAngle);
+            var mySunGeom = buildPlanet(mySun);
 
             planetImage = "planet.jpg";
-            var planet = buildPlanet(10, planetImage);
+            redAngle = 0.01;
+            var planet = new aPlanet(10, planetImage, 100, redAngle);
+            var planetGeom = buildPlanet(planet);
             
             bPlanetImage = "bplanet.jpg";
-            var bPlanet = buildPlanet(30, bPlanetImage);
+            blueAngle = 0.005;
+            var bPlanet = new aPlanet(30, bPlanetImage, 200, blueAngle);
+            var bPlanetGeom = buildPlanet(bPlanet);
 
 
             //make rotation matrices
             var axis = new THREE.Vector3(0.5, 1, 0.1)
 
-            sunAngle = 0.001;
-            redAngle = 0.01;
-            blueAngle = 0.005;
-            sunRotationMatrix = rotatePlanetMatrix(sunAngle);
-            redRotationMatrix = rotatePlanetMatrix(redAngle);
-            blueRotationMatrix = rotatePlanetMatrix(blueAngle);
+            sunRotationMatrix = rotatePlanetMatrix(mySun);
+            redRotationMatrix = rotatePlanetMatrix(planet);
+            blueRotationMatrix = rotatePlanetMatrix(bPlanet);
 
-            //set initial planets
-            redPositions = [100, -50, 0];
-            setPosition(planet, redPositions);
-            bluePositions = [200, -100, 0];
-            setPosition(bPlanet, bluePositions);
+            //set initial planets 
+            setPosition(planetGeom, planet);
+            setPosition(bPlanetGeom, bPlanet);
 
             render();
            
