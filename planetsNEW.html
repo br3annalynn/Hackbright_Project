@@ -19,7 +19,7 @@
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
-                camera.position.z = 500;
+                camera.position.z = 1000;
                
             }
 
@@ -130,8 +130,18 @@
                     solarSystem1.solarSystemList[i].updateOrbit();
                 }
                 
-                solarSystemGroup.rotateOnAxis(new THREE.Vector3(3, 1, 0).normalize(), 0.01);
-                       
+                
+                 
+                for(var i = 0; i < solarSystem2.solarSystemList.length; i++){
+                    solarSystem2.solarSystemList[i].updateSpin();
+                    solarSystem2.solarSystemList[i].angularSpeed += solarSystem2.solarSystemList[i].angleOfRot;
+                    solarSystem2.solarSystemList[i].updateOrbit();
+                }
+                
+                
+                 
+
+
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
             }
@@ -140,7 +150,7 @@
             ///////////////////////////////////////////////////////////////////////////////
             
             //global variables
-            var scene, camera, renderer, solarSystem1, solarSystemGroup;
+            var scene, camera, renderer, solarSystem1, solarSystemGroup, solarSystem2, solarSystemGroup2;
             var sunImages = ['sun.jpg', 'sun.png', 'sun1.gif', 'sun2.jpeg', 'sun3.jpeg', 'sun.jpeg'];
             var planetImages = ['planet.jpg', 'planet2.png', 'planet1.jpg', 'planet3.jpeg', 'planet4.jpg', 'planet5.png'];
             
@@ -155,9 +165,15 @@
                 //build a solar system 
                 solarSystem1 = new aSolarSystem(2);
                 solarSystemGroup = solarSystem1.buildSolarSystem();
-                solarSystemGroup.translateOnAxis(galaxyAxis, 200);
+                solarSystemGroup.translateOnAxis(galaxyAxis, 300);
                 //solarSystem.up = new THREE.Vector3(1, .25, 0);
                 scene.add(solarSystemGroup);
+
+                solarSystem2 = new aSolarSystem(3);
+                solarSystemGroup2 = solarSystem2.buildSolarSystem();
+                solarSystemGroup2.translateOnAxis(galaxyAxis, -400);
+                //solarSystem.up = new THREE.Vector3(1, .25, 0);
+                scene.add(solarSystemGroup2);
 
             
                 render();
