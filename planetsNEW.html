@@ -23,20 +23,6 @@
                
             }
 
-            // function aSpaceObject(){
-            //     this.rotAxis = null;
-               
-
-            //     // this.rotAxis = function(){
-            //     //     var vectora = Math.random();
-            //     //     var vectorb = Math.random()*2;
-            //     //     this.rotAxis = new THREE.Vector3(vectora, vectorb, 0.1).normalize();
-            //     // }
-                
-            // }
-
-            
-
             function aPlanet(radius, image, distFromCenter, angleOfRot, isSun){
                 this.radius = radius;
                 this.image = image;
@@ -47,6 +33,7 @@
                 this.angleOfRot = angleOfRot;
                 this.angularSpeed = angleOfRot;
                 this.isSun = isSun;
+                //this.solarSystem = solarSystem;
 
                 this.buildPlanet = function(){
                     var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
@@ -55,7 +42,8 @@
                     var sphere = new THREE.Mesh(geometry, material);
                     this.planetGeom = sphere;
                     // scene.add(sphere);
-                    solarSystem.add(sphere);
+                    //this.solarSystem.add(sphere);
+                    return sphere;
                 }
 
                 this.rotAxis = function(){
@@ -72,15 +60,13 @@
                 this.setPosition = function(){
                     //set the planet to a start position 
                     this.planetGeom.position.x = this.distFromCenter;
-
+                    
                 }
 
                 this.updateSpin = function(){
                     this.planetGeom.rotateOnAxis(this.rotAxis, this.angleOfRot);
 
                 }
-
-               
                 
                 /////////Parameterized version ////////////
                 this.updateOrbit = function(){
@@ -95,70 +81,85 @@
                 }
             }
 
+            function aSolarSystem(numOfPlanets){
+                this.numOfPlanets = numOfPlanets;
+                this.solarSystemList = [];
+                this.solarSystemGroup = null;
+
+                this.buildSolarSystem = function(){
+                    var group = new THREE.Object3D();
+                    
+                    //a number between 0 and 5.9;
+                    var randInt = Math.floor(Math.random() * 6 -.1);
+
+                    var sunImage = sunImages[randInt];
+                    var sunAngle = -0.001;
+                    var mySun = new aPlanet(100, sunImage, 0, sunAngle, true);
+                    var sphere = mySun.buildPlanet();
+                    mySun.rotAxis();
+                    group.add(sphere);
+                    this.solarSystemList.push(mySun);
+
+                    for(var i = 0; i < this.numOfPlanets; i++){
+                        //number between 0 and 5
+                        var randInt2 = Math.floor(Math.random() * 6);
+                        var planetImage = planetImages[randInt2];
+                        //make speed slower the further out you go
+                        var angle = (5 - i)/1000;
+                        var distance = i *100 + 200;
+                        var planet = new aPlanet((randInt2 + 1)*5, planetImage, distance, angle, false);
+                        var planetSphere = planet.buildPlanet();
+                        planet.rotAxis();
+                        planet.setPosition();
+                        group.add(planetSphere);
+                        this.solarSystemList.push(planet);
+                    }
+                    this.solarSystemGroup = group;
+                    return group;
+                }
+                
+            }
+
             //this creates a loop that runs every 60th of a sec
             function render(){
 
-                //spin each
-                mySun.updateSpin();
-                rPlanet.updateSpin();
-                bPlanet.updateSpin();
-              
-                //orbit each planet
-                rPlanet.angularSpeed += 0.005;
-                rPlanet.updateOrbit();
-                bPlanet.angularSpeed += 0.003;
-                bPlanet.updateOrbit();
-
-                //solarSystem.rotateOnAxis(new THREE.Vector3(1, 4, 0).normalize, 0.01);
+                //spin and orbit each
+                for(var i = 0; i < solarSystem1.solarSystemList.length; i++){
+                    solarSystem1.solarSystemList[i].updateSpin();
+                    solarSystem1.solarSystemList[i].angularSpeed += solarSystem1.solarSystemList[i].angleOfRot;
+                    solarSystem1.solarSystemList[i].updateOrbit();
+                }
+                
+                solarSystemGroup.rotateOnAxis(new THREE.Vector3(3, 1, 0).normalize(), 0.01);
                        
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
             }
             
 
-            /////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////
             
             //global variables
-            var scene, camera, renderer, mySun, rPlanet, bPlanet, solarSystem;
+            var scene, camera, renderer, solarSystem1, solarSystemGroup;
+            var sunImages = ['sun.jpg', 'sun.png', 'sun1.gif', 'sun2.jpeg', 'sun3.jpeg', 'sun.jpeg'];
+            var planetImages = ['planet.jpg', 'planet2.png', 'planet1.jpg', 'planet3.jpeg', 'planet4.jpg', 'planet5.png'];
+            
             function main(){
 
                 //build scene
                 sceneRendererCamera = buildScene();
 
-                solarSystem = new THREE.Object3D();
+                //define galaxy axis
+                galaxyAxis = new THREE.Vector3(1, .25, 0.1).normalize()
 
-                //build each (radius, image, distFromCenter, angleOfRot)
-                sunImage = "sun.png";
-                sunAngle = -0.001;
-                mySun = new aPlanet(100, sunImage, 0, sunAngle, true);
-                mySun.buildPlanet();
-                mySun.rotAxis();
+                //build a solar system 
+                solarSystem1 = new aSolarSystem(2);
+                solarSystemGroup = solarSystem1.buildSolarSystem();
+                solarSystemGroup.translateOnAxis(galaxyAxis, 200);
+                //solarSystem.up = new THREE.Vector3(1, .25, 0);
+                scene.add(solarSystemGroup);
 
-                rPlanetImage = "Planet.jpg";
-                redAngle = 0.005;
-                rPlanet = new aPlanet(8, rPlanetImage, 200, redAngle, false);
-                rPlanet.buildPlanet();
-                rPlanet.rotAxis();
-                
-                bPlanetImage = "bplanet.jpg";
-                blueAngle = 0.003;
-                bPlanet = new aPlanet(30, bPlanetImage, 300, blueAngle, false);
-                bPlanet.buildPlanet();
-                bPlanet.rotAxis();
-
-                scene.add(solarSystem);
-
-                
-                solarSystem.position.x = 100;
-                // solarSystem.up.x = .5;
-                // solarSystem.up.y = 8;
-
-
-                //set initial planets 
-
-                rPlanet.setPosition();
-                bPlanet.setPosition();
-
+            
                 render();
 
             }
