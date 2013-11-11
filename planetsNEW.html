@@ -19,7 +19,7 @@
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
-                camera.position.z = 1000;
+                camera.position.z = 2000;
                
             }
 
@@ -33,7 +33,7 @@
                 this.angleOfRot = angleOfRot;
                 this.angularSpeed = angleOfRot;
                 this.isSun = isSun;
-                //this.solarSystem = solarSystem;
+              
 
                 this.buildPlanet = function(){
                     var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
@@ -41,14 +41,12 @@
                     var material = new THREE.MeshBasicMaterial({map: texture});
                     var sphere = new THREE.Mesh(geometry, material);
                     this.planetGeom = sphere;
-                    // scene.add(sphere);
-                    //this.solarSystem.add(sphere);
                     return sphere;
                 }
 
                 this.rotAxis = function(){
                     if(this.isSun){
-                        this.rotAxis = new THREE.Vector3(0, 1, 0).normalize();
+                        this.rotAxis = new THREE.Vector3(0, 1, 0);
                     }
                     else{
                         var vectora = Math.random();
@@ -60,6 +58,7 @@
                 this.setPosition = function(){
                     //set the planet to a start position 
                     this.planetGeom.position.x = this.distFromCenter;
+                    //this.planetGeom.translateOnAxis(this.planeAxis, distFromCenter);
                     
                 }
 
@@ -67,34 +66,32 @@
                     this.planetGeom.rotateOnAxis(this.rotAxis, this.angleOfRot);
 
                 }
-                
-                /////////Parameterized version ////////////
+
                 this.updateOrbit = function(){
-                    
-                    x_direction = this.distFromCenter*Math.cos(this.angularSpeed)*1 + this.distFromCenter*Math.sin(this.angularSpeed)*0;
-                    y_direction = this.distFromCenter*Math.cos(this.angularSpeed)*0 + this.distFromCenter*Math.sin(this.angularSpeed)*0;
-                    z_direction = this.distFromCenter*Math.cos(this.angularSpeed)*0 + this.distFromCenter*Math.sin(this.angularSpeed)*1;
+                    //make planets follow an ellpitical path along the xz-plane
+                    x_direction = this.distFromCenter*1.5*Math.cos(this.angularSpeed);
+                    z_direction = this.distFromCenter*Math.sin(this.angularSpeed);
 
                     this.planetGeom.position.x = x_direction;
-                    this.planetGeom.position.y = y_direction;
                     this.planetGeom.position.z = z_direction;
                 }
             }
 
             function aSolarSystem(numOfPlanets){
                 this.numOfPlanets = numOfPlanets;
+                this.solarSystemAxis = new THREE.Vector3(1, 2, 0.1).normalize();
                 this.solarSystemList = [];
                 this.solarSystemGroup = null;
+                this.solarSystemLocation = null;
 
                 this.buildSolarSystem = function(){
                     var group = new THREE.Object3D();
                     
                     //a number between 0 and 5.9;
-                    var randInt = Math.floor(Math.random() * 6 -.1);
-
+                    var randInt = Math.floor(Math.random() * 6);
                     var sunImage = sunImages[randInt];
                     var sunAngle = -0.001;
-                    var mySun = new aPlanet(100, sunImage, 0, sunAngle, true);
+                    var mySun = new aPlanet(100, sunImage, 0, sunAngle, true, this.solarSystemAxis);
                     var sphere = mySun.buildPlanet();
                     mySun.rotAxis();
                     group.add(sphere);
@@ -107,7 +104,7 @@
                         //make speed slower the further out you go
                         var angle = (5 - i)/1000;
                         var distance = i *100 + 200;
-                        var planet = new aPlanet((randInt2 + 1)*5, planetImage, distance, angle, false);
+                        var planet = new aPlanet((randInt2 + 1)*5, planetImage, distance, angle, false, this.solarSystemAxis);
                         var planetSphere = planet.buildPlanet();
                         planet.rotAxis();
                         planet.setPosition();
@@ -115,69 +112,87 @@
                         this.solarSystemList.push(planet);
                     }
                     this.solarSystemGroup = group;
-                    return group;
+                    
+                }
+                this.translateSS = function(distance){
+                    this.solarSystemGroup.translateOnAxis(galaxyAxis, distance);
                 }
                 
+                this.rotateSS = function(angle){
+                    this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(0, 0, 1), angle);
+                }
+                
+            }
+
+            function buildGalaxy(numOfSolarSystems){
+                this.numOfSolarSystems = numOfSolarSystems;
+
+                for(var i = 1; i <= this.numOfSolarSystems; i++){
+                    //random number between 0, 1
+                    var randFloat = Math.random();
+                    //rand distance between -2000, 2000
+                    var randDist = randFloat*-4000 + 2000;
+                    var solarSystem = new aSolarSystem(2);
+                    solarSystem.buildSolarSystem();
+                    solarSystem.translateSS(randDist);
+                    solarSystem.rotateSS(randFloat);
+                    galaxyList.push(solarSystem);
+                    scene.add(solarSystem.solarSystemGroup);
+                }
             }
 
             //this creates a loop that runs every 60th of a sec
             function render(){
 
-                //spin and orbit each
-                for(var i = 0; i < solarSystem1.solarSystemList.length; i++){
-                    solarSystem1.solarSystemList[i].updateSpin();
-                    solarSystem1.solarSystemList[i].angularSpeed += solarSystem1.solarSystemList[i].angleOfRot;
-                    solarSystem1.solarSystemList[i].updateOrbit();
+                for(var i = 0; i < galaxyList.length; i++){
+                    for(var x = 0; x < galaxyList[i].solarSystemList.length; x++){
+                        galaxyList[i].solarSystemList[x].updateSpin();
+                        galaxyList[i].solarSystemList[x].angularSpeed += galaxyList[i].solarSystemList[x].angleOfRot;
+                        galaxyList[i].solarSystemList[x].updateOrbit();
+                    }
                 }
-                
-                
-                 
-                for(var i = 0; i < solarSystem2.solarSystemList.length; i++){
-                    solarSystem2.solarSystemList[i].updateSpin();
-                    solarSystem2.solarSystemList[i].angularSpeed += solarSystem2.solarSystemList[i].angleOfRot;
-                    solarSystem2.solarSystemList[i].updateOrbit();
-                }
-                
-                
-                 
-
 
                 renderer.render(scene, camera);
+
+                // solarSystem1.solarSystemLocation = new THREE.Vector3(solarSystem1.solarSystemGroup.children[0].matrixWorld.elements[12], solarSystem1.solarSystemGroup.children[0].matrixWorld.elements[13], solarSystem1.solarSystemGroup.children[0].matrixWorld.elements[14]);
+
+
+                // if(clock.getElapsedTime() < 20){
+                //     if(camera.position.x <= solarSystem1.solarSystemLocation.x){
+                //         camera.position.x += 2; 
+                //         camera.position.z -= 2;
+                //     }
+                //     if(camera.position.y <= solarSystem1.solarSystemLocation.y){
+                //         camera.position.y += .5;
+                //     }
+                // }
+           
                 requestAnimationFrame(render);
+
             }
             
 
             ///////////////////////////////////////////////////////////////////////////////
             
             //global variables
-            var scene, camera, renderer, solarSystem1, solarSystemGroup, solarSystem2, solarSystemGroup2;
-            var sunImages = ['sun.jpg', 'sun.png', 'sun1.gif', 'sun2.jpeg', 'sun3.jpeg', 'sun.jpeg'];
+            var scene, camera, renderer, solarSystem1, solarSystem2;
+            var clock = new THREE.Clock(true);
+            var sunImages = ['sun4.jpg', 'sun.png', 'sun1.gif', 'sun2.jpeg', 'sun3.jpeg', 'sun.jpg'];
             var planetImages = ['planet.jpg', 'planet2.png', 'planet1.jpg', 'planet3.jpeg', 'planet4.jpg', 'planet5.png'];
+            var galaxyList = [];
+            var galaxyAxis = new THREE.Vector3(1, .15, 0.1).normalize()
             
             function main(){
 
                 //build scene
-                sceneRendererCamera = buildScene();
+                buildScene();
 
-                //define galaxy axis
-                galaxyAxis = new THREE.Vector3(1, .25, 0.1).normalize()
+                //build galaxy
+                var numOfSS = 2;
+                buildGalaxy(numOfSS);
 
-                //build a solar system 
-                solarSystem1 = new aSolarSystem(2);
-                solarSystemGroup = solarSystem1.buildSolarSystem();
-                solarSystemGroup.translateOnAxis(galaxyAxis, 300);
-                //solarSystem.up = new THREE.Vector3(1, .25, 0);
-                scene.add(solarSystemGroup);
-
-                solarSystem2 = new aSolarSystem(3);
-                solarSystemGroup2 = solarSystem2.buildSolarSystem();
-                solarSystemGroup2.translateOnAxis(galaxyAxis, -400);
-                //solarSystem.up = new THREE.Vector3(1, .25, 0);
-                scene.add(solarSystemGroup2);
-
-            
+                //render the scene
                 render();
-
             }
 
             main();
