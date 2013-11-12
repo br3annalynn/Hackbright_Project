@@ -5,7 +5,7 @@ function buildScene(){
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    camera.position.z = 2000;
+    camera.position.z = 3000;
    
 }
 
@@ -15,9 +15,9 @@ function buildGalaxy(numOfSolarSystems){
     for(var i = 1; i <= this.numOfSolarSystems; i++){
         //random number between 0, 1
         var randFloat = Math.random();
-        //rand distance between -2000, 2000
-        var randDist = randFloat*-4000 + 2000;
-        var solarSystem = new aSolarSystem(2);
+        //rand distance between -3000, 3000
+        var randDist = randFloat*-6000 + 3000;
+        var solarSystem = new aSolarSystem(4, randDist);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS(randDist);
         solarSystem.rotateSS(randFloat);
@@ -26,12 +26,15 @@ function buildGalaxy(numOfSolarSystems){
     }
 }
 
-function aSolarSystem(numOfPlanets){
+function aSolarSystem(numOfPlanets, randDist){
     this.numOfPlanets = numOfPlanets;
     this.solarSystemAxis = new THREE.Vector3(1, 2, 0.1).normalize();
     this.solarSystemList = [];
     this.solarSystemGroup = null;
-    this.solarSystemLocation = null;
+    this.solarSystemLocation = new THREE.Vector3(galaxyAxis.x * randDist, galaxyAxis.y * randDist, galaxyAxis.z * randDist);
+    var correctionVector = new THREE.Vector3(0, 30, 500);
+    this.solarSystemViewLocation = new THREE.Vector3(0,0,0);
+    this.solarSystemViewLocation.addVectors(this.solarSystemLocation, correctionVector);
 
     this.buildSolarSystem = function(){
         var group = new THREE.Object3D();
@@ -55,9 +58,11 @@ function aSolarSystem(numOfPlanets){
             var distance = i *100 + 200;
             var planet = new aPlanet((randInt2 + 1)*5, planetImage, distance, angle, false, this.solarSystemAxis);
             var planetSphere = planet.buildPlanet();
+            var planetOrbit = planet.showOrbitPath();
             planet.rotAxis();
             planet.setPosition();
             group.add(planetSphere);
+            group.add(planetOrbit);
             this.solarSystemList.push(planet);
         }
         this.solarSystemGroup = group;
@@ -78,7 +83,6 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, isSun){
     this.image = image;
     this.distFromCenter = distFromCenter;
     this.planetGeom = null;
-    //this.spaceObject = new aSpaceObject();
     this.rotAxis = null;
     this.angleOfRot = angleOfRot;
     this.angularSpeed = angleOfRot;
@@ -92,6 +96,18 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, isSun){
         var sphere = new THREE.Mesh(geometry, material);
         this.planetGeom = sphere;
         return sphere;
+    }
+
+    this.showOrbitPath = function(){
+        ///makes an ellipse outline
+        var geometry = new THREE.Geometry();
+        var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .5, transparent: true} );
+        for(var i = 0; i < 360; i++){
+            var thetha = i * Math.PI / 180;
+            geometry.vertices.push( new THREE.Vector3(this.distFromCenter*1.5*Math.cos(thetha), 0,  distFromCenter*Math.sin(thetha))) 
+        }
+        var line = new THREE.Line(geometry, material);
+        return line;
     }
 
     this.rotAxis = function(){
@@ -128,23 +144,20 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, isSun){
 }
 
 
-function moveCameraToSS(solarSystem){
-    if(camera.position.x <= solarSystem.solarSystemLocation.x){
-        camera.position.x += 2; 
-        camera.position.z -= 2;
-    }
-    if(camera.position.y <= solarSystem.solarSystemLocation.y){
-        camera.position.y += .5;
+function moveCameraToSS(currentSolarSystem){
+    
+    var toLocation = currentSolarSystem.solarSystemViewLocation;
+    //camera.translateOnAxis(toLocation, 2);
+    //camera.position.addVectors(camera.position, toLocation);
+    if(camera.position.x != currentSolarSystem.solarSystemViewLocation.x){ 
+        camera.translateOnAxis(toLocation, 2);
     }
 }
 
 function zoomOut(){
-    if(camera.position.x >= 0){
-        camera.position.x -= 2; 
-        camera.position.z += 2;
-    }
-    if(camera.position.y >= 0){
-        camera.position.y -= .5;
+    console.log('zooming out now');
+    if(camera.position.x >= 0 && camera.position.y >= 0 && camera.position.z <= cameraLocation.z){
+        camera.translateOnAxis(cameraLocation, 2);
     }
 }
 
@@ -160,26 +173,16 @@ function render(){
         }
     }
     
-    //set the ss location once
     renderer.render(scene, camera);
-    if(clock.getElapsedTime() < 2){
-        for(var i = 0; i < galaxyList.length; i++){
-            galaxyList[i].solarSystemLocation = new THREE.Vector3(galaxyList[i].solarSystemGroup.children[0].matrixWorld.elements[12], galaxyList[i].solarSystemGroup.children[0].matrixWorld.elements[13], galaxyList[i].solarSystemGroup.children[0].matrixWorld.elements[14]);
-        }
-    }
-   
-    if(clock.getElapsedTime() < 10){
-        moveCameraToSS(galaxyList[0]);
-    }
-    if(clock.getElapsedTime() > 10 && clock.getElapsedTime() < 20){
-        zoomOut();
-    }
-    if(clock.getElapsedTime() > 20 && clock.getElapsedTime() < 30){
-        moveCameraToSS(galaxyList[1]);
-    }
-    if(clock.getElapsedTime() > 30){
-        zoomOut();
-    }
+  
+    // console.log(clock.getElapsedTime());
+    //moveCameraToSS(galaxyList[0]);
+    // if(clock.getElapsedTime() < 30){
+    //     moveCameraToSS(galaxyList[0]);
+    // }
+    // if(clock.getElapsedTime() > 30){
+    //     zoomOut();
+    // }
 
     requestAnimationFrame(render);
 
@@ -194,7 +197,8 @@ var clock = new THREE.Clock(true);
 var sunImages = ['sun4.jpg', 'sun.png', 'sun1.gif', 'sun2.jpeg', 'sun3.jpeg', 'sun.jpg'];
 var planetImages = ['planet.jpg', 'planet2.png', 'planet1.jpg', 'planet3.jpeg', 'planet4.jpg', 'planet5.png'];
 var galaxyList = [];
-var galaxyAxis = new THREE.Vector3(1, .15, 0.1).normalize()
+var galaxyAxis = new THREE.Vector3(1, .15, 0.1).normalize();
+var cameraLocation = new THREE.Vector3(0, 0, 2000);
 
 function main(){
 

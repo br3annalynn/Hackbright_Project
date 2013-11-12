@@ -10,7 +10,7 @@
 
     </head>
     <body>
-        <script src="three.min.js"></script>
+        <script src="/three.min.js"></script>
         <script>
      
             function render(){
@@ -19,6 +19,18 @@
             
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
+
+                location = new THREE.Vector3(1, 2, 0).normalize() * 100;
+
+                if(camera.position.x <= location.x){
+                    camera.position.x += 2; 
+                    camera.position.z -= 2;
+                }
+                if(camera.position.y <= location.y){
+                    camera.position.y += .5;
+                }
+
+
             }
 
             var scene = new THREE.Scene();
@@ -26,7 +38,8 @@
             var renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
-            camera.position.z = 500;
+            camera.position.z = 800;
+            camera.position.y = 100;
 
             //add camera to the screen
             scene.add(camera);
@@ -35,11 +48,32 @@
             var material = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
             var sphere = new THREE.Mesh(geometry, material);
 
+            var geometry2 = new THREE.SphereGeometry(5, 16, 16);
+            var material2 = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
+            var sphere2 = new THREE.Mesh(geometry2, material2);
+            sphere2.position.x = 100;
+
+            
+
+            ///makes an ellipse outline
+            var geometry3 = new THREE.Geometry();
+            var material3 = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .5} );
+            for(var i = 0; i < 360; i++){
+                var thetha = i * Math.PI / 180;
+                geometry3.vertices.push( new THREE.Vector3(100*1.5*Math.cos(thetha), 0,  100*Math.sin(thetha))) 
+            }
+
+            var line = new THREE.Line(geometry3, material3);
+            
 
             group = new THREE.Object3D();
             group.add(sphere);
-            group.up = new THREE.Vector3(3, 1, 0).normalize();
+            group.add(sphere2);
+            group.add(line);
             scene.add(group);
+
+
+            group.translateOnAxis(new THREE.Vector3(1, 2, 0).normalize(), 300);
             group.rotateOnAxis(new THREE.Vector3(0, 0, 1), .2);
             //sphere.position.x = 200;
 
