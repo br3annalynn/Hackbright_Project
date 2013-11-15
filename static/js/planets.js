@@ -1,7 +1,8 @@
 
 function buildScene(){
+    console.log('building scene');
     SCENE = new THREE.Scene();
-    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30000);
     RENDERER = new THREE.WebGLRenderer();
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(RENDERER.domElement);
@@ -16,24 +17,24 @@ function randNum(minRange, maxRange){
 }
 
 function buildGalaxy(numOfSolarSystems){
-
+    console.log('building', numOfSolarSystems, 'solar systems');
     for(var i = 1; i <= numOfSolarSystems; i++){
-        //var randDist = randNum(-3000, 3000);
-        //var solarSystem = new aSolarSystem(5, randDist);
-        var solarSystem = new aSolarSystem(5);
+        var numOfPlanets = randInt = Math.floor(randNum(1, 7));
+        var solarSystem = new aSolarSystem(numOfPlanets);
         solarSystem.buildSolarSystem();
-        //solarSystem.translateSS(randDist);
         solarSystem.translateSS();
         solarSystem.rotateSS(randNum(0, 1));
 
         GALAXYLIST.push(solarSystem);
+        console.log('adding solar system to the scene');
         SCENE.add(solarSystem.solarSystemGroup);
     }
 }
 
 function checkLocations(potentialLocation){
+    console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < GALAXYLIST[i].distanceToView){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 2000 + GALAXYLIST[i].distanceToView){
             return false;
         }
     }
@@ -44,14 +45,13 @@ function aSolarSystem(numOfPlanets){
     this.numOfPlanets = numOfPlanets;
     this.solarSystemList = [];
     this.solarSystemGroup = null;
-    this.solarSystemLocation = new THREE.Vector3(0,0,0)
+    this.solarSystemLocation = new THREE.Vector3(0,0,0);
     //set distance to view to 800 outside last orbit ring
-    this.distanceToView = 200 + numOfPlanets*100 + 800
+    this.distanceToView = 1000 + numOfPlanets*100;
 
 
     this.buildSolarSystem = function(){
         var group = new THREE.Object3D();
-        
         //a number between 0 and 5.9;
         var randInt = Math.floor(randNum(0, 6));
         var sunImage = sunImages[randInt];
@@ -63,6 +63,7 @@ function aSolarSystem(numOfPlanets){
         group.add(sphere);
         this.solarSystemList.push(mySun);
 
+        console.log('building', this.numOfPlanets, 'planets');
         for(var i = 0; i < this.numOfPlanets; i++){
             //number between 0 and 5
             randInt = Math.floor(randNum(0, 6));
@@ -85,28 +86,30 @@ function aSolarSystem(numOfPlanets){
     }
 
     this.translateSS = function(){
+        console.log('translating solar system');
         //check if the location is too close to a current solar system in the galaxy
-        var randDist = randNum(-3000, 3000);
-        //var randDist = 0;
-        //var potentialLocation = new THREE.Vector3(0,0,0);
-        //var check = false;
-        // while(check == false){
-        //     randDist = randNum(-6000, 6000);
-        //     potentialLocation = new THREE.Vector3(0,0,0);
-        //     potentialLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist/2));
-        //     check = checkLocations(potentialLocation);
-        // }
+        var randDist = 0;
+        var randDist2 = 0;
+        var potentialLocation = new THREE.Vector3(0,0,0);
+        var check = false;
+        while(check == false){
+            randDist = randNum(-6000, 6000);
+            randDist2 = randNum(-3000, 3000);
+            potentialLocation = new THREE.Vector3(0,0,0);
+            potentialLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
+            check = checkLocations(potentialLocation);
+        }
 
         this.solarSystemGroup.translateOnAxis(GALAXYAXIS, randDist);
-        // this.solarSystemGroup.translateOnAxis(new THREE.Vector3(0, 0, 1), randDist/2);
-        // this.solarSystemLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist/2));
+        this.solarSystemGroup.translateOnAxis(new THREE.Vector3(0, 0, 1), randDist2);
+        this.solarSystemLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
   
     }
     
     this.rotateSS = function(angle){
+        console.log('rotating sola system');
         this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(0, 0, 1), angle);
-        this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.25);
-
+        this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.35);
     }
     
 }
@@ -125,6 +128,7 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, angularSpeed, isSun)
   
 
     this.buildPlanet = function(){
+        console.log('building planets geometry and texture');
         var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
         var texture = new THREE.ImageUtils.loadTexture(this.image);
         var material = new THREE.MeshBasicMaterial({map: texture});
@@ -134,6 +138,7 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, angularSpeed, isSun)
     }
 
     this.showOrbitPath = function(){
+        console.log('showing the orbital path');
         ///makes an ellipse outline
         var geometry = new THREE.Geometry();
         var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .5, transparent: true} );
@@ -224,22 +229,23 @@ function render(){
     // console.log(CLOCK.getElapsedTime());
     // console.log('counter');
     // console.log(COUNTER);
-    moveCameraToSS(GALAXYLIST[0], false);
-    // if(CLOCK.getElapsedTime() < 5){
-    //     moveCameraToSS(GALAXYLIST[0], false);
-    // }
-    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 5.1){
-    //     COUNTER = 0;
-    // } 
-    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 10){
-    //     moveCameraToSS(GALAXYLIST[0], true);
-    // }
-    // if(CLOCK.getElapsedTime() > 10 && CLOCK.getElapsedTime() < 10.1){
-    //     COUNTER = 0;
-    // }
-    // if(CLOCK.getElapsedTime() > 10){
-    //     moveCameraToSS(GALAXYLIST[1], false);
-    // }
+    //moveCameraToSS(GALAXYLIST[0], false);
+    
+    if(CLOCK.getElapsedTime() < 5){
+        moveCameraToSS(GALAXYLIST[0], false);
+    }
+    if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 5.1){
+        COUNTER = 0;
+    } 
+    if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 10){
+        moveCameraToSS(GALAXYLIST[0], true);
+    }
+    if(CLOCK.getElapsedTime() > 10 && CLOCK.getElapsedTime() < 10.1){
+        COUNTER = 0;
+    }
+    if(CLOCK.getElapsedTime() > 10){
+        moveCameraToSS(GALAXYLIST[1], false);
+    }
 
     requestAnimationFrame(render);
 
@@ -263,7 +269,7 @@ function main(){
     buildScene();
 
     //build galaxy
-    var numOfSS = 2;
+    var numOfSS = 4;
     buildGalaxy(numOfSS);
     
     //render the SCENE
