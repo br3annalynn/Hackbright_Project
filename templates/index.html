@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+    {%block body%}
+        <div id="mainbox">
+            <div id="welcome"> <h1>Welcome to Musictarium </h1></div>
+            <div id="login" class="buttons"> <a href="{{url_for("login")}}">Login</a></div>
+            <div id="signup" class="buttons"><a href="{{url_for("get_registration_info")}}">Sign up</a></div>
+        </div>  
+        <script src="../static/js/three.min.js"></script>
+        <script src="../static/js/welcome.js"></script>
+    {% endblock %}

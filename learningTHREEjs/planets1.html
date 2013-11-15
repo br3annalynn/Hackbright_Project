@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Planets</title>
+        <style>
+            canvas { width: 100%; height: 100% }
+            body{
+                background-image: url('stars2.jpg');
+            }
+        </style>
+
+    </head>
+    <body>
+        <script src="three.min.js"></script>
+        <script>
+
+            function buildScene(){
+                var scene = new THREE.Scene();
+                var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+                camera.position.z = 400;
+                return [scene, renderer, camera]
+            }
+            
+            function aPlanet(radius, image, distFromSun, angleOfRot){
+                this.radius = radius;
+                this.image = image;
+                this.distFromSun = distFromSun;
+                this.angleOfRot = angleOfRot;
+                //this angle of rotation will not update on each call of the render function
+                this.ANGLEofROT = angleOfRot;
+                this.axis = new THREE.Vector3(0.5, 1, 0.1)
+                this.rot_mtx = new THREE.Matrix4;
+                this.planetGeom = null;
+
+                this.buildPlanet = function(){
+                    var geometry = new THREE.SphereGeometry(this.radius, 16, 16);
+                    var texture = new THREE.ImageUtils.loadTexture(this.image);
+                    var material = new THREE.MeshBasicMaterial({map: texture});
+                    var sphere = new THREE.Mesh(geometry, material);
+                    scene.add(sphere);
+                    this.planetGeom = sphere;
+                }
+
+                this.setPosition = function(){
+                    //set the planet to a start position 
+                    this.planetGeom.position.x = this.distFromSun;
+                    this.planetGeom.position.y = this.distFromSun*-0.5;
+                    this.planetGeom.position.z = 0;
+                }
+
+                this.rotFunction = function(){
+                    this.rot_mtx.makeRotationAxis(this.axis, this.ANGLEofROT);
+                    return this.rot_mtx;
+                }
+
+                this.orbitPlanet = function(){
+                    x_direction = this.distFromSun*Math.cos(this.angleOfRot)*0.8945 + this.distFromSun*Math.sin(this.angleOfRot)*-0.412;
+                    y_direction = this.distFromSun*Math.cos(this.angleOfRot)*-0.472 + this.distFromSun*Math.sin(this.angleOfRot)*-0.0799;
+                    z_direction = this.distFromSun*Math.cos(this.angleOfRot)*0 + this.distFromSun*Math.sin(this.angleOfRot)*1.009;
+                    this.planetGeom.position.x = x_direction;
+                    this.planetGeom.position.y = y_direction;
+                    this.planetGeom.position.z = z_direction;
+
+                }
+            
+            }
+
+
+            //this creates a loop that runs every 60th of a sec
+            function render(){
+                
+                //spin each planet and sun
+                mySun.planetGeom.applyMatrix(mySun.rotFunction());
+                rPlanet.planetGeom.applyMatrix(rPlanet.rotFunction());
+                bPlanet.planetGeom.applyMatrix(bPlanet.rotFunction());
+
+                //orbit each rPlanet
+                // rPlanet.angleOfRot += 0.01;
+                // rPlanet.orbitPlanet();
+
+                // bPlanet.angleOfRot += 0.005;
+                // bPlanet.orbitPlanet();
+            
+                renderer.render(scene, camera);
+
+                requestAnimationFrame(render);
+            }
+            
+
+            /////////////////////////////////////////
+            //build scene
+            sceneRendererCamera = buildScene();
+            var scene = sceneRendererCamera[0];
+            var renderer = sceneRendererCamera[1];
+            var camera = sceneRendererCamera[2];
+
+            //build each rPlanet: aPlanet(radius, image, distFromSun, angleOfRot)
+            sunImage = "sun.png";
+            sunAngle = 0.001;
+            var mySun = new aPlanet(80, sunImage, 0, sunAngle);
+            mySun.buildPlanet();
+            
+
+            rPlanetImage = "Planet.jpg";
+            redAngle = 0.01;
+            var rPlanet = new aPlanet(10, rPlanetImage, 100, redAngle);
+            rPlanet.buildPlanet();
+            
+            
+            bPlanetImage = "bplanet.jpg";
+            blueAngle = 0.005;
+            var bPlanet = new aPlanet(30, bPlanetImage, 200, blueAngle);
+            bPlanet.buildPlanet();
+            
+
+            //set initial planets 
+            rPlanet.setPosition();
+            bPlanet.setPosition();
+
+            render();
+
+        </script>
+    </body>
+</html>
