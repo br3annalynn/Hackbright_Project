@@ -1,50 +1,134 @@
 canvas { 
     width: 100%; 
     height: 100%;
-    }
+}
+
 body{
     background-image: url('../imgs/stars2.jpg');
     background-color: black;
-    color: #fff5a2;
+    color: rgb(40, 40, 50);
+    font-family: comic;
 }
+/*css for index.html*/
 #mainbox{
     overflow: hidden;
-    margin: 0 auto 0;
-    width: 600px;
+    width: 100%;
     position: absolute;
     top: 20px;
-    left: 500px;
+    
 }
+
 #welcome{
-    overflow: hidden;
-    width: 600px;
+    /*overflow: hidden;*/
+    width: 650px;
+    height: 100px;
     margin: auto;
     font-size: 30px;
 }
+
 .buttons{
     overflow: hidden;
-    width: 100px;
+    width: 50px;
     float: left;
 }
+
+#login_signup{
+    overflow: hidden;
+    width: 200px;
+    margin: auto;
+}
+
 #login{
-    margin-left: 60px;
+    margin-right: 80px;
 }
+
 a{
-    color: rgb(133, 32, 32);
+    color: rgb(133, 23, 50);
 }
+
+/*css for planets.html*/
+#navBar{
+    width: 100%;
+    background-color: rgba(40, 40, 50, .5); 
+}
+
 #musicbox{
     width: 300px;
     height: 650px;
-    background-color: rgba(133, 32, 32, .5);
-    color: #fff5a2;
-    margin: 10px;
+    background-color: rgba(40, 40, 50, .5);
+    color: gray;
+    margin: 20px;
     position: absolute;
 }
 
+#directionButtonBox{
+    margin: 20px;
+    /*border-width: 1px;
+    border-style: solid;
+    border-color: gray;*/
+    position: absolute;
+    right: 10px;
+    width: 170px;
+    height: 170px;
+    background-color: rgba(40, 40, 50, .5);
+}
 
+.rows{
+    padding-top: 5px;
+    width: 100%;
+    height: 50px;
+}
 
+#bottomRow{
+    margin-bottom: 5px;
+}
 
+.directionButtons{
+    width: 50px;
+    height: 50px;
+}
 
+#upButton{
+    background-image: url('../imgs/up.png');
+    margin: auto;
+}
+
+#leftButton{
+    background-image: url('../imgs/left.png');
+    margin-left: 5px;
+    float: left;
+}
+
+#rightButton{
+    background-image: url('../imgs/right.png');
+    margin-left: 5px;
+    margin-right: 5px;
+    float: left;
+}
+
+#downButton{
+    background-image: url('../imgs/down.png');
+    margin-left: 5px;
+    float: left;
+}
+
+#inButton{
+    background-image: url('../imgs/in.png');
+    margin-left: 32.5px;
+    float: left;
+}
+
+#outButton{
+    background-image: url('../imgs/out.png');
+    margin-left: 5px;
+    margin-right: 32.5px;
+    float: left;
+}
+/*purple
+rgb(100, 23, 150);
+
+red
+rgb(133, 23, 50);*/
 
 
 

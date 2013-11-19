@@ -166,14 +166,14 @@ function moveCameraToSS(currentSolarSystem, out){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0005;
+        COUNTER = COUNTER + 0.0003;
     }
 
     if(CAMERA.position.distanceTo(toLocation) < distanceOut + 2000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0005/(2001 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.0003/(2001 - CAMERA.position.distanceTo(toLocation));
     }
 }
 

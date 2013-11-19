@@ -3,7 +3,26 @@
 
 {%block body%}
     
+    <div id="navBar"> <a href="/">logout</a></div>
+    
+    <div id="directionButtonbox">
+        <div class="rows">
+            <div id="upButton" class='directionButtons'></div>
+        </div>
+        <div id="middleRow" class="rows">
+            <div id="leftButton" class='directionButtons'></div>
+            <div id="downButton" class='directionButtons'></div>
+            <div id="rightButton" class='directionButtons'></div>
+        </div>
+        <div class="rows">
+            <div id="inButton" class='directionButtons'></div>
+            <div id="outButton" class='directionButtons'></div>
+        </div>
+
+    </div>
+    <div id="musicbox"> User's Music </div>
     <script src="../static/js/three.min.js"></script>
+    <script src="../static/js/jquery-2.0.3.js"></script>
     <script src="../static/js/planets.js"></script>
 
 {% endblock %}

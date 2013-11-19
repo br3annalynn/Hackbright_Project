@@ -4,13 +4,14 @@
         <style>
             canvas { width: 100%; height: 100% }
             body{
-                background-image: url('stars2.jpg');
+                background-color: black;
             }
         </style>
 
     </head>
     <body>
-        <script src="/three.min.js"></script>
+        <script src="three.min.js"></script>
+        <script src="jquery-2.0.3.js"></script>
         <script>
      
             function render(){
@@ -20,15 +21,15 @@
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
 
-                location = new THREE.Vector3(1, 2, 0).normalize() * 100;
+                // location = new THREE.Vector3(1, 2, 0).normalize() * 100;
 
-                if(camera.position.x <= location.x){
-                    camera.position.x += 2; 
-                    camera.position.z -= 2;
-                }
-                if(camera.position.y <= location.y){
-                    camera.position.y += .5;
-                }
+                // if(camera.position.x <= location.x){
+                //     camera.position.x += 2; 
+                //     camera.position.z -= 2;
+                // }
+                // if(camera.position.y <= location.y){
+                //     camera.position.y += .5;
+                // }
 
 
             }
@@ -48,10 +49,10 @@
             var material = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
             var sphere = new THREE.Mesh(geometry, material);
 
-            var geometry2 = new THREE.SphereGeometry(5, 16, 16);
-            var material2 = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
-            var sphere2 = new THREE.Mesh(geometry2, material2);
-            sphere2.position.x = 100;
+            // var geometry2 = new THREE.SphereGeometry(5, 16, 16);
+            // var material2 = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
+            // var sphere2 = new THREE.Mesh(geometry2, material2);
+            // sphere2.position.x = 100;
 
             
 
@@ -68,7 +69,7 @@
 
             group = new THREE.Object3D();
             group.add(sphere);
-            group.add(sphere2);
+            // group.add(sphere2);
             group.add(line);
             scene.add(group);
 
@@ -77,7 +78,27 @@
             group.rotateOnAxis(new THREE.Vector3(0, 0, 1), .2);
             //sphere.position.x = 200;
 
-
+            function onkeypress(e) {
+               
+                if (e.keyCode == '37') {
+                    console.log('left pressed');
+                    camera.position.x = camera.position.x - 50;
+                }
+                else if (e.keyCode == '38') {
+                    console.log('up pressed');
+                    camera.position.y = camera.position.y + 50;
+                }
+                else if (e.keyCode == '39') {
+                    console.log('right pressed');
+                    camera.position.x = camera.position.x + 50;
+                }
+                else if (e.keyCode == '40') {
+                    console.log('down pressed');
+                    camera.position.y = camera.position.y - 50;
+                }
+            }
+            document.addEventListener('keypress', onkeypress, false);
+            
             render();
 
 

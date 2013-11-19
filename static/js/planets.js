@@ -19,7 +19,7 @@ function randNum(minRange, maxRange){
 function buildGalaxy(numOfSolarSystems){
     console.log('building', numOfSolarSystems, 'solar systems');
     for(var i = 1; i <= numOfSolarSystems; i++){
-        var numOfPlanets = randInt = Math.floor(randNum(1, 7));
+        var numOfPlanets = randInt = Math.floor(randNum(2, 7));
         var solarSystem = new aSolarSystem(numOfPlanets);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS();
@@ -34,7 +34,7 @@ function buildGalaxy(numOfSolarSystems){
 function checkLocations(potentialLocation){
     console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 2000 + GALAXYLIST[i].distanceToView){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 3000 + GALAXYLIST[i].distanceToView){
             return false;
         }
     }
@@ -176,13 +176,16 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, angularSpeed, isSun)
         this.planetGeom.position.z = z_direction;
     }
 }
-
+// function turnToNext(currentSolarSystem, nextSolarSystem){
+//     var travelVector = new THREE.Vector3(nextSolarSystem.solarSystemLocation.x - currentSolarSystem.solarSystemLocation.x, nextSolarSystem.solarSystemLocation.y - currentSolarSystem.solarSystemLocation.y, nextSolarSystem.solarSystemLocation.z - currentSolarSystem.solarSystemLocation.z);
+//     if(CAMERA.)
+// }
 
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
         toLocation = new THREE.Vector3(0, 0, 10000);
-        //how from from the object the camera should stop
+        //how far from the object the camera should stop
         distanceOut = 0;
     }
     else{
@@ -192,7 +195,7 @@ function moveCameraToSS(currentSolarSystem, out){
     }
     //find directional vector (camera - position)
     var directVector = new THREE.Vector3(toLocation.x - CAMERA.position.x, toLocation.y - CAMERA.position.y, toLocation.z - CAMERA.position.z);
-        
+    
     CAMERA.lookAt(currentSolarSystem.solarSystemLocation);
 
 
@@ -200,14 +203,14 @@ function moveCameraToSS(currentSolarSystem, out){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0005;
+        COUNTER = COUNTER + 0.0003;
     }
 
     if(CAMERA.position.distanceTo(toLocation) < distanceOut + 2000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0005/(2001 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.0003/(2001 - CAMERA.position.distanceTo(toLocation));
     }
 }
 
@@ -224,34 +227,55 @@ function render(){
     
     RENDERER.render(SCENE, CAMERA);
   
+    // moveCameraToSS(GALAXYLIST[0], false);
     
-    // console.log('time');
-    // console.log(CLOCK.getElapsedTime());
-    // console.log('counter');
-    // console.log(COUNTER);
-    //moveCameraToSS(GALAXYLIST[0], false);
     
-    if(CLOCK.getElapsedTime() < 5){
-        moveCameraToSS(GALAXYLIST[0], false);
-    }
-    if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 5.1){
-        COUNTER = 0;
-    } 
-    if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 10){
-        moveCameraToSS(GALAXYLIST[0], true);
-    }
-    if(CLOCK.getElapsedTime() > 10 && CLOCK.getElapsedTime() < 10.1){
-        COUNTER = 0;
-    }
-    if(CLOCK.getElapsedTime() > 10){
-        moveCameraToSS(GALAXYLIST[1], false);
-    }
+
+    // if(CLOCK.getElapsedTime() < 5){
+    //     moveCameraToSS(GALAXYLIST[0], false);
+    // }
+    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 5.1){
+    //     COUNTER = 0;
+    // } 
+    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 10){
+    //     moveCameraToSS(GALAXYLIST[0], true);
+    // }
+    // if(CLOCK.getElapsedTime() > 10 && CLOCK.getElapsedTime() < 10.1){
+    //     COUNTER = 0;
+    // }
+    // if(CLOCK.getElapsedTime() > 10){
+    //     moveCameraToSS(GALAXYLIST[1], false);
+    // }
 
     requestAnimationFrame(render);
 
 }
 
-
+function onkeypress(e) {
+               
+    if (e.keyCode == '37') {
+        e.preventDefault();
+        console.log('left pressed');
+        CAMERA.position.x = CAMERA.position.x - 10;
+    }
+    else if (e.keyCode == '38') {
+        e.preventDefault();
+        console.log('up pressed');
+        CAMERA.position.y = CAMERA.position.y + 20;
+    }
+    else if (e.keyCode == '39') {
+        e.preventDefault();
+        console.log('right pressed');
+        CAMERA.position.x = CAMERA.position.x + 20;
+    }
+    else if (e.keyCode == '40') {
+        e.preventDefault();
+        console.log('down pressed');
+        CAMERA.position.y = CAMERA.position.y - 20;
+    }
+}
+            
+            
 ///////////////////////////////////////////////////////////////////////////////
 
 //global variables
@@ -272,8 +296,17 @@ function main(){
     var numOfSS = 4;
     buildGalaxy(numOfSS);
     
-    //render the SCENE
+    document.addEventListener('keypress', onkeypress, false);
+    //////////change from click to while clicked
+    $('#upButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y + 50});
+    $('#downButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y - 50});
+    $('#leftButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x - 50});
+    $('#rightButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x + 50});
+    $('#outButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z + 50});
+    $('#inButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z - 50});
 
+
+    //render the SCENE
     render();
 }
 

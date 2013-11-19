@@ -4,9 +4,6 @@
         <link href="../static/css/main.css" rel="stylesheet">
     </head>
     <body>
-        <div>
-            <div> <a href="{{url_for("show_planets")}}">planets</a></div>
-        </div>
         <div id = "big_container">
             {% if session.get("session_user_id") %}
                 <div id = "logged_in_nav_bar">
