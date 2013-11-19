@@ -1,5 +1,6 @@
 import config
 import bcrypt
+import os
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -60,6 +61,14 @@ def login(email, password):
     #if user.password == password:
     if user.authenticate:
         return user.id
+
+def get_Rdio_info(user):
+    #take in current user and return API info from db
+    CONSUMER_KEY = os.getenv('RDIO_CONSUMER_KEY')
+    CONSUMER_SECRET = os.getenv('RDIO_CONSUMER_SECRET')
+    ACCESS_TOKEN_KEY = os.getenv('MY_RDIO_ACCESS_TOKEN_KEY')
+    ACCESS_TOKEN_SECRET = os.getenv('MY_RDIO_ACCESS_TOKEN_SECRET')
+    return [CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET]
 
 if __name__ == "__main__":
     create_tables()

@@ -5,6 +5,7 @@ from flaskext.markdown import Markdown
 import config
 import forms
 import model
+import my_rdio_search
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -85,10 +86,18 @@ def register_user():
 
 @app.route("/planets")
 def show_planets():
-    #call my_rdio_search on current user to return music collection and playlists
     return render_template("planets.html")
 
-
+@app.route("/get_music")
+def get_music_data():
+    #get info for current user. Returns a list of keys and secrets
+    user_info = model.get_Rdio_info('fake user')
+    #call my_rdio_search on current user to return music collection and playlists
+    music_collection = my_rdio_search.get_user_collection(user_info)
+    
+    # playlists = my_rdio_search.get_user_playlists(user_info)
+    # return (music_collection, playlists)
+    return music_collection
 
 if __name__ == "__main__":
     app.run(debug=True)
