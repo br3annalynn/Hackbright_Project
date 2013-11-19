@@ -85,6 +85,7 @@ def register_user():
 
 @app.route("/planets")
 def show_planets():
+    #call my_rdio_search on current user to return music collection and playlists
     return render_template("planets.html")
 
 
