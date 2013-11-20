@@ -39,7 +39,7 @@ def get_user_collection(user_info):
             album['tracks'].append(get_track_info(track))
         collection.append(album)
 
-    return json.dumps({'collection': collection})
+    return json.dumps({'user_name': current_user.name, 'collection': collection})
 
 ##### Gets user's playlists
 def get_user_playlist(user_info):
@@ -57,7 +57,7 @@ def get_user_playlist(user_info):
             single_playlist['tracks'].append(get_track_info(track))
         playlists.append(single_playlist)
 
-    return json.dumps({'playlists': playlists})
+    return json.dumps({'user_name': current_user.name, 'playlists': playlists})
     
 
 # get_user_playlist(current_user)

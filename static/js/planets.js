@@ -20,8 +20,8 @@ function buildGalaxy(numOfSolarSystems){
     // console.log('building', numOfSolarSystems, 'solar systems');
     for(var i = 0; i < numOfSolarSystems; i++){
         // set numOfPlanets to number of songs on album
-        var numOfPlanets = MUSIC_COLLECTION[i]['tracks'].length;
-        console.log('*********', MUSIC_COLLECTION[i]['name'], 'has', MUSIC_COLLECTION[i]['tracks'].length, 'songs');
+        var numOfPlanets = MUSICCOLLECTION[i]['tracks'].length;
+        // console.log('*********', MUSICCOLLECTION[i]['name'], 'has', MUSICCOLLECTION[i]['tracks'].length, 'songs');
         // var numOfPlanets = 12;
         var solarSystem = new aSolarSystem(numOfPlanets);
         solarSystem.buildSolarSystem();
@@ -278,26 +278,13 @@ function onkeypress(e) {
     }
 }
             
-            
-///////////////////////////////////////////////////////////////////////////////
-
-//global variables
-var SCENE, CAMERA, RENDERER;
-var CLOCK = new THREE.Clock(true);
-var sunImages = ['../static/imgs/sun4.jpg', '../static/imgs/sun.png', '../static/imgs/sun1.gif', '../static/imgs/sun2.jpeg', '../static/imgs/sun3.jpeg', '../static/imgs/sun.jpg'];
-var planetImages = ['../static/imgs/planet.jpg', '../static/imgs/planet2.png', '../static/imgs/planet1.jpg', '../static/imgs/planet3.jpeg', '../static/imgs/planet4.jpg', '../static/imgs/planet5.png'];
-var GALAXYLIST = [];
-var GALAXYAXIS = new THREE.Vector3(1, .15, 0.1).normalize();
-var MUSIC_COLLECTION;
-
-var COUNTER = 0;
 function main(){
 
     //build SCENE
     buildScene();
 
     //build galaxy
-    var numOfSS = MUSIC_COLLECTION.length;
+    var numOfSS = MUSICCOLLECTION.length;
     buildGalaxy(numOfSS);
     
     document.addEventListener('keypress', onkeypress, false);
@@ -314,14 +301,26 @@ function main(){
     render();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+//global variables
+var SCENE, CAMERA, RENDERER;
+var CLOCK = new THREE.Clock(true);
+var sunImages = ['../static/imgs/sun4.jpg', '../static/imgs/sun.png', '../static/imgs/sun1.gif', '../static/imgs/sun2.jpeg', '../static/imgs/sun3.jpeg', '../static/imgs/sun.jpg'];
+var planetImages = ['../static/imgs/planet.jpg', '../static/imgs/planet2.png', '../static/imgs/planet1.jpg', '../static/imgs/planet3.jpeg', '../static/imgs/planet4.jpg', '../static/imgs/planet5.png'];
+var GALAXYLIST = [];
+var GALAXYAXIS = new THREE.Vector3(1, .15, 0.1).normalize();
+var MUSICCOLLECTION;
+var COUNTER = 0;
+
+
 var result = $.get('/get_music', import_music);
 
 function import_music(result){
     // set music collection to a list of album dictionaries
-    MUSIC_COLLECTION = $.parseJSON(result)['collection'];
-    // console.log(music_collection['collection'][0]['name'])
+
+    var data = $.parseJSON(result);
+    MUSICCOLLECTION = data['collection'];
     main();
 }
-
-
 

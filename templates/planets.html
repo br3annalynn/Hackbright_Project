@@ -20,9 +20,29 @@
         </div>
 
     </div>
-    <div id="musicbox"> User's Music </div>
+    <div id="musicbox">
+        <div id="user_music">
+        </div>
+        <ul id="tabs">
+          <li><a href="#albums_tab">Albums</a></li>
+          <li><a href="#playlist_tabs">Playlists</a></li>
+        </ul>
+        <div class="tabContent" id="albums_tab">
+            <h2>Albums</h2>
+            <div id="album_list">    
+            </div>
+        </div>
+        <div class="tabContent" id="playlist_tabs">
+            <h2>Playlists</h2>
+            <div>
+                <p>This is where the playlists will be.</p>   
+            </div>
+        </div>
+    </div>
+
     <script src="../static/js/three.min.js"></script>
     <script src="../static/js/jquery-2.0.3.js"></script>
     <script src="../static/js/planets.js"></script>
+    <script src="../static/js/user_music.js"></script>
 
 {% endblock %}
