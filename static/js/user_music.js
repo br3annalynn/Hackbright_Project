@@ -25,6 +25,37 @@ function init() {
         i++;
       }
 
+      //assign onclick event for albums
+        $('.album').click(function(){
+            $('#musicbox').hide();
+            $('playlistbox').hide();
+            $('#playbox').show();
+            ALBUMNUM = $(this).attr('albumNumber')
+            fillInAlbumBox(ALBUMNUM);
+            ALBUMCLICKED = true;
+            
+        });
+
+        // $('.playlist').click(function(){
+        //     $('#musicbox').hide();
+        //     $('playlistbox').hide();
+        //     $('#playbox').show();
+        //     ALBUMNUM = $(this).attr('albumNumber')
+        //     fillInAlbumBox(ALBUMNUM);
+        //     ALBUMCLICKED = true;
+            
+        // });
+    
+        $('#username').click(function(){
+            $('#albumbox').empty();
+            $('#username').empty();
+            $('#playbox').hide();
+            $('#musicbox').show();
+            ALBUMCLICKED = false;
+
+            
+      });
+
       // Hide all content divs except the first
       var i = 0;
 
@@ -33,6 +64,7 @@ function init() {
         i++;
       }
     }
+
 
 function showTab() {
     var selectedId = getHash( this.getAttribute('href') );
@@ -67,28 +99,60 @@ function getHash( url ) {
 }
 
 function fillInMusicbox(){
+    $('#playbox').hide();
     $('#user_music').append(USERNAME, "'s Music");
+
     for(var i = 0; i < MUSICCOLLECTION.length; i++){
-        var trackTitle = MUSICCOLLECTION[i]['name']
-        $('#album_list').append('<p>' + trackTitle + '</p>');
+        var albumTitle = MUSICCOLLECTION[i]['name'];
+        $('#album_list').append('<p class="album" id="album' + i + '" albumNumber="' + i + '">' + albumTitle + '<p>');
+    }
+
+    for(var i = 0; i < PLAYLISTS.length; i++){
+        var playlistTitle = PLAYLISTS[i]['name'];
+        $('#playlist_list').append('<p class="playlist" id="playist' + i + '" playlistNumber="' + i + '">' + playlistTitle + '<p>');
     }
 }
 
+function fillInAlbumBox(albumNum){
+    $('#username').append(USERNAME, "'s Music");
+    var albumName = MUSICCOLLECTION[albumNum]['name'];
+    $('#albumbox').append('<h2>' + albumName + '</h2>');
+    var albumTracks = MUSICCOLLECTION[albumNum]['tracks'];
+    for(var i = 0; i < albumTracks.length; i++){
+        $('#albumbox').append('<p>' + albumTracks[i]['name'] + '</p>');
+    }
+}
+
+function fillInPlaylistBox(playlistNum){
+    $('#username').append(USERNAME, "'s Music");
+    var playlistName = PLAYLISTS[playlistNum]['name'];
+    $('#albumbox').append('<h2>' + playlistName + '</h2>');
+    var playlistTracks = PLAYLISTS[playlistNum]['tracks'];
+    for(var i = 0; i < playlistTracks.length; i++){
+        $('#albumbox').append('<p>' + playlistTracks[i]['name'] + '</p>');
+    }
+}
 
 ////////////////////////////////////
-var MUSICCOLLECTION;
 var USERNAME;
-var result = $.get('/get_music', import_music);
+var PLAYLISTS;
+var ALBUMNUM = 0;
 
-function import_music(result){
+
+result = $.get('/get_playlists', import_playlists);
+
+function import_playlists(result){
     // set music collection to a list of album dictionaries
 
     var data = $.parseJSON(result);
-    MUSICCOLLECTION = data['collection'];
+    PLAYLISTS = data['playlists'];
     USERNAME = data['user_name'].split(" ")[0];
     fillInMusicbox();
     init();
 }
+
+
+
 
 
 

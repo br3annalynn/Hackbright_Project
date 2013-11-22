@@ -187,7 +187,7 @@ function aPlanet(radius, image, distFromCenter, angleOfRot, angularSpeed, isSun)
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
-        toLocation = new THREE.Vector3(0, 0, 10000);
+        toLocation = new THREE.Vector3(0, 0, 30000);
         //how far from the object the camera should stop
         distanceOut = 0;
     }
@@ -202,18 +202,18 @@ function moveCameraToSS(currentSolarSystem, out){
     CAMERA.lookAt(currentSolarSystem.solarSystemLocation);
 
 
-    if(CAMERA.position.distanceTo(toLocation) > distanceOut + 2000){
+    if(CAMERA.position.distanceTo(toLocation) > distanceOut + 4000){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
         COUNTER = COUNTER + 0.0003;
     }
 
-    if(CAMERA.position.distanceTo(toLocation) < distanceOut + 2000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
+    if(CAMERA.position.distanceTo(toLocation) < distanceOut + 4000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0003/(2001 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.0003/(4001 - CAMERA.position.distanceTo(toLocation));
     }
 }
 
@@ -230,8 +230,15 @@ function render(){
     
     RENDERER.render(SCENE, CAMERA);
   
-    // moveCameraToSS(GALAXYLIST[0], false);
+    if (ALBUMCLICKED){
+        moveCameraToSS(GALAXYLIST[ALBUMNUM], false);
+        }
     
+    else{
+        moveCameraToSS(GALAXYLIST[ALBUMNUM], true);
+    }
+    // moveCameraToSS(GALAXYLIST[0], false);
+     
     
 
     // if(CLOCK.getElapsedTime() < 5){
@@ -311,10 +318,11 @@ var planetImages = ['../static/imgs/planet.jpg', '../static/imgs/planet2.png', '
 var GALAXYLIST = [];
 var GALAXYAXIS = new THREE.Vector3(1, .15, 0.1).normalize();
 var MUSICCOLLECTION;
+var ALBUMCLICKED = false;
 var COUNTER = 0;
 
 
-var result = $.get('/get_music', import_music);
+var result = $.get('/get_music_collection', import_music);
 
 function import_music(result){
     // set music collection to a list of album dictionaries
@@ -322,5 +330,6 @@ function import_music(result){
     var data = $.parseJSON(result);
     MUSICCOLLECTION = data['collection'];
     main();
+
 }
 
