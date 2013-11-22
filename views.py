@@ -6,6 +6,7 @@ import config
 import forms
 import model
 import my_rdio_search
+import json
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -88,21 +89,35 @@ def register_user():
 def show_planets():
     return render_template("planets.html")
 
-@app.route("/get_music")
-def get_music_data():
-    session_music_collection = session.get('session_music_collection')
-    if session_music_collection:
-        return session_music_collection
-    else:
-        #get info for current user. Returns a list of keys and secrets
-        user_info = model.get_Rdio_info('fake user')
-        #call my_rdio_search on current user to return music collection and playlists
-        music_collection = my_rdio_search.get_user_collection(user_info)
 
-        # playlists = my_rdio_search.get_user_playlists(user_info)
-        # return (music_collection, playlists)
-        session['session_music_collection'] = session_music_collection
-        return music_collection
+@app.route("/get_music_collection")
+def get_music_collection():
+    # session_music_collection = session.get('session_music_collection')
+    # if session_music_collection:
+    #     return session_music_collection
+    # else:
+    user_info = model.get_Rdio_info('fake user')
+    #call my_rdio_search on current user to return music collection and playlists
+    music_collection = my_rdio_search.get_user_collection(user_info)
+    # session['session_music_collection'] = session_music_collection
+    return music_collection
+
+@app.route("/get_playlists")
+def get_playlists():
+    # session_playlists = session.get('session_playlists')
+    # if session_playlists:
+    #     return session_playlists
+    # else:
+    user_info = model.get_Rdio_info('fake user')
+    #call my_rdio_search on current user to return music collection and playlists
+    playlists = my_rdio_search.get_user_playlists(user_info)
+    # session['playlists'] = session_playlists
+    return playlists
+
+@app.route("/clear")
+def clear():
+    session.clear()
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)

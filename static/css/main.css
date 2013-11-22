@@ -7,7 +7,7 @@ body{
     background-image: url('../imgs/stars2.jpg');
     background-color: black;
     color: rgb(40, 40, 50);
-    font-family: comic;
+    font-family: 'Droid Serif';
 }
 /*css for index.html*/
 #mainbox{
@@ -58,18 +58,38 @@ a{
 
 
 #musicbox{
-    width: 305px;
-    height: 650px;
+    /*width: 305px;*/
     background-color: rgba(40, 40, 50, .7);
     color: gray;
     margin: 20px;
     position: absolute;
 }
+
+#playbox{
+    /*width: 305px;*/
+    /*height: 650px;*/
+    background-color: rgba(40, 40, 50, .7);
+    color: gray;
+    margin: 20px;
+    position: absolute;
+}
+
 #user_music{
     height: 50px;
     font-size: 26px;
     padding-top: 15px;
     padding-left: 15px;
+}
+
+#username{
+    /*height: 50px;*/
+    font-size: 26px;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+#username:hover{
+    color: rgb(133, 23, 50);
 }
 
 #tabs { 
@@ -100,7 +120,7 @@ ul#tabs li a.selected {
 }
 div.tabContent { 
     width: 260px;
-    margin-left: 15px;
+    margin: 0 15px 15px 15px;
     border: 1px solid #606060; 
     padding: 8px; 
     background-color: rgba(40, 40, 50, .5); 
@@ -109,9 +129,23 @@ div.tabContent.hide {
     display: none; 
 }
 
+p:hover { 
+    color: rgb(133, 23, 50);
+}
 
 
+#albumbox{
+    width: 260px;
+    margin: 0 15px 15px 15px;
+    /*border: 1px solid #606060; */
+    padding: 8px; 
+    /*background-color: rgba(40, 40, 50, .5);*/
+}
 
+
+#songControls{
+    padding-left: 15px;
+}
 
 
 #directionButtonBox{

@@ -42,7 +42,7 @@ def get_user_collection(user_info):
     return json.dumps({'user_name': current_user.name, 'collection': collection})
 
 ##### Gets user's playlists
-def get_user_playlist(user_info):
+def get_user_playlists(user_info):
     rdio_manager = rdio.Api(user_info[0], user_info[1], user_info[2], user_info[3])
     current_user = rdio_manager.current_user()
     playlists = []
