@@ -15,21 +15,19 @@
         <script>
      
             function render(){
-                sphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), 0.008);
+                // sphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), 0.008);
                 //group.rotateOnAxis(new THREE.Vector3(0, 0, 1), 0.01);
             
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
+                // sphere.position.x = sphere.position.x + 10;
+                // sphere.position.y = sphere.position.y + 10;
+                // sphere.position.z = sphere.position.z + 10;
+        
 
-                // location = new THREE.Vector3(1, 2, 0).normalize() * 100;
-
-                // if(camera.position.x <= location.x){
-                //     camera.position.x += 2; 
-                //     camera.position.z -= 2;
-                // }
-                // if(camera.position.y <= location.y){
-                //     camera.position.y += .5;
-                // }
+                // pointLight.position.x = 10;
+                // pointLight.position.y = 50;
+                // pointLight.position.z = 130;
 
 
             }
@@ -46,13 +44,13 @@
             scene.add(camera);
 
             var geometry = new THREE.SphereGeometry(50, 16, 16);
-            var material = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
+            var material = new THREE.MeshPhongMaterial({color: 0xCC0000, wireframe: true});
             var sphere = new THREE.Mesh(geometry, material);
 
-            // var geometry2 = new THREE.SphereGeometry(5, 16, 16);
-            // var material2 = new THREE.MeshBasicMaterial({color: 0xCC0000, wireframe: true});
-            // var sphere2 = new THREE.Mesh(geometry2, material2);
-            // sphere2.position.x = 100;
+            var geometry2 = new THREE.SphereGeometry(50, 16, 16);
+            var material2 = new THREE.MeshPhongMaterial({color: 0xCC99CC, wireframe: true});
+            var sphere2 = new THREE.Mesh(geometry2, material2);
+            sphere2.position.x = 100;
 
             
 
@@ -69,13 +67,30 @@
 
             group = new THREE.Object3D();
             group.add(sphere);
-            // group.add(sphere2);
+            group.add(sphere2);
             group.add(line);
             scene.add(group);
 
+            // var light1 = new THREE.AmbientLight( 0x404040 ); // soft white light 
+            // scene.add( light1 );
 
-            group.translateOnAxis(new THREE.Vector3(1, 2, 0).normalize(), 300);
-            group.rotateOnAxis(new THREE.Vector3(0, 0, 1), .2);
+            // var light2 = new THREE.PointLight( 0xFFFFFF, 10, 100 ); 
+            // light2.position.set( 10, 0, 0 ); 
+            // scene.add( light2 );
+
+            var spotLight = new THREE.SpotLight( 0xffffff, 5 ); 
+            spotLight.position.set( 0, 100, 0 ); 
+            spotLight.castShadow = true; 
+            spotLight.shadowMapWidth = 1024; 
+            spotLight.shadowMapHeight = 1024; 
+            spotLight.shadowCameraNear = 500; 
+            spotLight.shadowCameraFar = 4000; 
+            spotLight.shadowCameraFov = 30; 
+            scene.add( spotLight );
+
+
+            // group.translateOnAxis(new THREE.Vector3(1, 2, 0).normalize(), 300);
+            // group.rotateOnAxis(new THREE.Vector3(0, 0, 1), .2);
             //sphere.position.x = 200;
 
             function onkeypress(e) {

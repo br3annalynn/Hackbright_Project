@@ -28,7 +28,6 @@ function init() {
       //assign onclick event for albums
         $('.album').click(function(){
             $('#musicbox').hide();
-            $('playlistbox').hide();
             $('#playbox').show();
             ALBUMNUM = $(this).attr('albumNumber')
             fillInAlbumBox(ALBUMNUM);
@@ -36,15 +35,13 @@ function init() {
             
         });
 
-        // $('.playlist').click(function(){
-        //     $('#musicbox').hide();
-        //     $('playlistbox').hide();
-        //     $('#playbox').show();
-        //     ALBUMNUM = $(this).attr('albumNumber')
-        //     fillInAlbumBox(ALBUMNUM);
-        //     ALBUMCLICKED = true;
+        $('.playlist').click(function(){
+            $('#musicbox').hide();
+            $('#playbox').show();
+            PLAYLISTNUM = $(this).attr('playlistNumber')
+            fillInPlaylistBox(PLAYLISTNUM);
             
-        // });
+        });
     
         $('#username').click(function(){
             $('#albumbox').empty();
@@ -136,8 +133,9 @@ function fillInPlaylistBox(playlistNum){
 ////////////////////////////////////
 var USERNAME;
 var PLAYLISTS;
+//set to zero so camera knows where to look initially
 var ALBUMNUM = 0;
-
+var PLAYLISTNUM;
 
 result = $.get('/get_playlists', import_playlists);
 

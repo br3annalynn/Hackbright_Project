@@ -17,12 +17,11 @@ function randNum(minRange, maxRange){
 }
 
 function buildGalaxy(numOfSolarSystems){
-    // console.log('building', numOfSolarSystems, 'solar systems');
+    
+
     for(var i = 0; i < numOfSolarSystems; i++){
         // set numOfPlanets to number of songs on album
         var numOfPlanets = MUSICCOLLECTION[i]['tracks'].length;
-        // console.log('*********', MUSICCOLLECTION[i]['name'], 'has', MUSICCOLLECTION[i]['tracks'].length, 'songs');
-        // var numOfPlanets = 12;
         var solarSystem = new aSolarSystem(numOfPlanets);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS();
@@ -50,7 +49,7 @@ function aSolarSystem(numOfPlanets){
     this.solarSystemGroup = null;
     this.solarSystemLocation = new THREE.Vector3(0,0,0);
     //set distance to view to 800 outside last orbit ring
-    this.distanceToView = 1000 + numOfPlanets*100;
+    this.distanceToView = 1000 + numOfPlanets*200;
 
 
     this.buildSolarSystem = function(){
@@ -237,26 +236,7 @@ function render(){
     else{
         moveCameraToSS(GALAXYLIST[ALBUMNUM], true);
     }
-    // moveCameraToSS(GALAXYLIST[0], false);
-     
-    
-
-    // if(CLOCK.getElapsedTime() < 5){
-    //     moveCameraToSS(GALAXYLIST[0], false);
-    // }
-    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 5.1){
-    //     COUNTER = 0;
-    // } 
-    // if(CLOCK.getElapsedTime() > 5 && CLOCK.getElapsedTime() < 10){
-    //     moveCameraToSS(GALAXYLIST[0], true);
-    // }
-    // if(CLOCK.getElapsedTime() > 10 && CLOCK.getElapsedTime() < 10.1){
-    //     COUNTER = 0;
-    // }
-    // if(CLOCK.getElapsedTime() > 10){
-    //     moveCameraToSS(GALAXYLIST[1], false);
-    // }
-
+ 
     requestAnimationFrame(render);
 
 }
@@ -322,6 +302,7 @@ var ALBUMCLICKED = false;
 var COUNTER = 0;
 
 
+
 var result = $.get('/get_music_collection', import_music);
 
 function import_music(result){
@@ -332,4 +313,6 @@ function import_music(result){
     main();
 
 }
+
+
 

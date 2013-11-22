@@ -64,8 +64,10 @@ def login(email, password):
 
 def get_Rdio_info(user):
     #take in current user and return API info from db
+    #general keys for website
     CONSUMER_KEY = os.getenv('RDIO_CONSUMER_KEY')
     CONSUMER_SECRET = os.getenv('RDIO_CONSUMER_SECRET')
+    #keys specific to the user
     ACCESS_TOKEN_KEY = os.getenv('MY_RDIO_ACCESS_TOKEN_KEY')
     ACCESS_TOKEN_SECRET = os.getenv('MY_RDIO_ACCESS_TOKEN_SECRET')
     return [CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET]

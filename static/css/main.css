@@ -85,7 +85,7 @@ a{
     /*height: 50px;*/
     font-size: 26px;
     padding-top: 15px;
-    padding-left: 15px;
+    padding-left: 23px;
 }
 
 #username:hover{
@@ -145,7 +145,32 @@ p:hover {
 
 #songControls{
     padding-left: 15px;
+    /*padding-right: 40px;*/
 }
+
+.musicControls{
+    float: left;
+    width: 63px;
+    height: 60px;
+}
+#play{
+    margin-right: 3px;
+    background-image: url('../imgs/play.png');
+}
+
+#pause{
+    margin-right: 3px;
+    background-image: url('../imgs/pause.png');
+}
+#fwd{
+    background-image: url('../imgs/fwd.png');
+}
+#back{
+    margin-right: 3px;
+    background-image: url('../imgs/back.png');
+}
+
+
 
 
 #directionButtonBox{
