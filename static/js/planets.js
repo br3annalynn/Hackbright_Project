@@ -28,7 +28,6 @@ function buildGalaxy(numOfSolarSystems){
         solarSystem.rotateSS(randNum(0, 1));
 
         GALAXYLIST.push(solarSystem);
-        console.log('adding solar system to the scene');
         SCENE.add(solarSystem.solarSystemGroup);
     }
 }
