@@ -116,7 +116,7 @@ def get_playlists():
 
 @app.route("/get_token")
 def get_token():
-    domain = "http://space-james.herokuapp.com/planets"
+    domain = "space-james.herokuapp.com/planets"
     user_info = model.get_Rdio_info('fake user')
     token = my_rdio_search.get_user_playback_token(user_info, domain)
     return token

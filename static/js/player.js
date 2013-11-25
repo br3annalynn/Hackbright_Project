@@ -22,8 +22,7 @@ THE SOFTWARE.
 
 // a global variable that will hold a reference to the api swf once it has loaded
 var apiswf = null;
-// var playback_token = "GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=";
-var domain = "http://space-james.herokuapp.com/planets";
+var domain = "space-james.herokuapp.com/planets";
 
 var playback_token = $.get('/get_token', playing);
 
@@ -73,6 +72,7 @@ function playMusic(){
 var callback_object = {};
 
 callback_object.ready = function ready(user) {
+  console.log('ready');
   // Called once the API SWF has loaded and is ready to accept method calls.
 
   // find the embed/object element
