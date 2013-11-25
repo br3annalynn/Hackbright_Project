@@ -1,5 +1,4 @@
-var tabLinks = new Array();
-var contentDivs = new Array();
+
 
 function init() {
 
@@ -46,6 +45,7 @@ function init() {
 
     
         $('#username').click(function(){
+            $('#album_title').empty();
             $('#albumbox').empty();
             $('#username').empty();
             $('#playbox').hide();
@@ -103,12 +103,14 @@ function fillInMusicbox(){
 
     for(var i = 0; i < MUSICCOLLECTION.length; i++){
         var albumTitle = MUSICCOLLECTION[i]['name'];
-        $('#album_list').append('<p class="album" id="album' + i + '" albumNumber="' + i + '">' + albumTitle + '<p>');
+        var artist = MUSICCOLLECTION[i]['artist']
+        $('#album_list').append('<p class="artistTitles">' + artist + '</p>');
+        $('#album_list').append('<p class="album" id="album' + i + '" albumNumber="' + i + '">' + albumTitle + '</p>');
     }
 
     for(var i = 0; i < PLAYLISTS.length; i++){
         var playlistTitle = PLAYLISTS[i]['name'];
-        $('#playlist_list').append('<p class="playlist" id="playist' + i + '" playlistNumber="' + i + '">' + playlistTitle + '<p>');
+        $('#playlist_list').append('<p class="playlist" id="playist' + i + '" playlistNumber="' + i + '">' + playlistTitle + '</p>');
     }
 }
 
@@ -121,6 +123,7 @@ function fillInAlbumBox(albumNum){
         $('#albumbox').append('<p class="song" id="song' + i + '" songNumber="' + i + '" click=playMusic()>' + albumTracks[i]['name'] + '</p>');
         $('#song' + i).click(playMusic);
     }
+    $('#album_title').append(MUSICCOLLECTION[albumNum]['name']);
 }
 
 function fillInPlaylistBox(playlistNum){
@@ -135,6 +138,8 @@ function fillInPlaylistBox(playlistNum){
 
 
 ////////////////////////////////////
+var tabLinks = new Array();
+var contentDivs = new Array();
 var USERNAME;
 var PLAYLISTS;
 //set to zero so camera knows where to look initially

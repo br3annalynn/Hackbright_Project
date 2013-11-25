@@ -22,36 +22,45 @@ THE SOFTWARE.
 
 // a global variable that will hold a reference to the api swf once it has loaded
 var apiswf = null;
-var playback_token = "GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=";
+// var playback_token = "GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=";
 var domain = "localhost";
 
-$(document).ready(function() {
-  // on page load use SWFObject to load the API swf into div#apiswf
-  var flashvars = {
-    'playbackToken': playback_token, // from token.js
-    'domain': domain,                // from token.js
-    'listener': 'callback_object'    // the global name of the object that will receive callbacks from the SWF
+var playback_token = $.get('/get_token', playing);
+
+function playing(playback_token){
+  console.log(playback_token);
+
+
+  $(document).ready(function() {
+    // on page load use SWFObject to load the API swf into div#apiswf
+    console.log('playback token2: ', playback_token);
+    playback_token = 'GAlSk7u8APdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTAH67B9prO4LTxAYQpcFc=';
+    var flashvars = {
+      'playbackToken': playback_token, // from token.js
+      'domain': domain,                // from token.js
+      'listener': 'callback_object'    // the global name of the object that will receive callbacks from the SWF
+      };
+    var params = {
+      'allowScriptAccess': 'always'
     };
-  var params = {
-    'allowScriptAccess': 'always'
-  };
-  var attributes = {};
-  swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
-      'apiswf', // the ID of the element that will be replaced with the SWF
-      1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
+    var attributes = {};
+    swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
+        'apiswf', // the ID of the element that will be replaced with the SWF
+        1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
 
 
-  // set up the controls
-  
+    // set up the controls
+    
 
-  $('#play').click(function() {
-      apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+    $('#play').click(function() {
+        apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+    });
+    $('#stop').click(function() { apiswf.rdio_stop(); });
+    $('#pause').click(function() { apiswf.rdio_pause(); });
+    $('#back').click(function() { apiswf.rdio_previous(); });
+    $('#fwd').click(function() { apiswf.rdio_next(); });
   });
-  $('#stop').click(function() { apiswf.rdio_stop(); });
-  $('#pause').click(function() { apiswf.rdio_pause(); });
-  $('#back').click(function() { apiswf.rdio_previous(); });
-  $('#fwd').click(function() { apiswf.rdio_next(); });
-});
+}
 
 function playMusic(){
     console.log('clicked');

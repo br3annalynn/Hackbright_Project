@@ -30,6 +30,7 @@ def get_user_collection(user_info):
 
     for i in range(0, len(user_collection)):
         album = {}
+        album['artist'] = user_collection[i].artist_name
         album['name'] = user_collection[i].name
         album['tracks'] = [];
         tracks = rdio_manager.get_tracks_for_album_in_collection(user_collection[i].key, user=current_user.key)
@@ -45,6 +46,7 @@ def get_user_collection(user_info):
 def get_user_playlists(user_info):
     rdio_manager = rdio.Api(user_info[0], user_info[1], user_info[2], user_info[3])
     current_user = rdio_manager.current_user()
+
     playlists = []
     user_playlists = rdio_manager.get_playlists(extras=['tracks']).owned_playlists
 
@@ -59,9 +61,13 @@ def get_user_playlists(user_info):
 
     return json.dumps({'user_name': current_user.name, 'playlists': playlists})
     
+#####Get playback token for user
+def get_user_playback_token(user_info, domain):
+    rdio_manager = rdio.Api(user_info[0], user_info[1], user_info[2], user_info[3])
+    playback_token = rdio_manager.get_playback_token(domain)
+    return playback_token
 
-# get_user_playlist(current_user)
-# get_user_collection(current_user)
+
 
 
 

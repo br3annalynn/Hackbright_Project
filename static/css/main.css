@@ -170,6 +170,30 @@ p:hover {
     background-image: url('../imgs/back.png');
 }
 
+#album_title_box{
+    position: absolute;
+    width: 100%;
+    top: 350px;
+}
+
+#album_title{
+    margin: auto;
+    width: 200px;
+    text-align: center;
+}
+
+.artistTitles:hover{
+    color: gray;
+}
+
+.artistTitles{
+    font-weight: bold;
+    margin: 0px;
+}
+
+.album{
+    margin-top: 0px;
+}
 
 
 

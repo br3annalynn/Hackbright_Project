@@ -957,7 +957,7 @@ class Api(object):
         """
         data = {'method': methods['get_playback_token']}
         if domain: data['domain'] = domain
-        result = self.call_api(data)
+        result = self.call_api_authenticated(data)
         return result if result else None
 
     def get_playlists(self, extras=[]):

@@ -114,6 +114,14 @@ def get_playlists():
     # session['playlists'] = session_playlists
     return playlists
 
+@app.route("/get_token")
+def get_token():
+    domain = "localhost"
+    user_info = model.get_Rdio_info('fake user')
+    token = my_rdio_search.get_user_playback_token(user_info, domain)
+    return token
+
+
 @app.route("/clear")
 def clear():
     session.clear()
