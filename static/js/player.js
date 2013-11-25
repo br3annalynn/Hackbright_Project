@@ -33,8 +33,8 @@ function playing(playback_token){
 
   $(document).ready(function() {
     // on page load use SWFObject to load the API swf into div#apiswf
-    console.log('playback token2: ', playback_token);
-    playback_token = 'GAlSk7u8APdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTAH67B9prO4LTxAYQpcFc=';
+    // console.log('playback token2: ', playback_token);
+    // playback_token = 'GAlSk7u8APdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTAH67B9prO4LTxAYQpcFc=';
     var flashvars = {
       'playbackToken': playback_token, // from token.js
       'domain': domain,                // from token.js
