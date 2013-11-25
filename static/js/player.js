@@ -23,7 +23,7 @@ THE SOFTWARE.
 // a global variable that will hold a reference to the api swf once it has loaded
 var apiswf = null;
 // var playback_token = "GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=";
-var domain = "localhost";
+var domain = "http://space-james.herokuapp.com/planets";
 
 var playback_token = $.get('/get_token', playing);
 
