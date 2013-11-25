@@ -24,8 +24,9 @@ class User(Base, UserMixin):
     id = Column(Integer, primary_key=True)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
+    access_token_key = Column(String(64), nullable=True)
+    access_token_secret = Column(String(64), nullable=True)
     salt = Column(String(64), nullable=False)
-    last_song = Column(String(64), nullable=False) ############is this a string?????
 
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
