@@ -120,7 +120,7 @@ function fillInAlbumBox(albumNum){
     $('#albumbox').append('<h2>' + albumName + '</h2>');
     var albumTracks = MUSICCOLLECTION[albumNum]['tracks'];
     for(var i = 0; i < albumTracks.length; i++){
-        $('#albumbox').append('<p class="song" id="song' + i + '" songNumber="' + i + '" click=playMusic()>' + albumTracks[i]['name'] + '</p>');
+        $('#albumbox').append('<p class="song" id="song' + i + '" songNumber="' + i + '">' + albumTracks[i]['name'] + '</p>');
         $('#song' + i).click(playMusic);
     }
     $('#album_title').append(MUSICCOLLECTION[albumNum]['name']);
@@ -132,7 +132,7 @@ function fillInPlaylistBox(playlistNum){
     $('#albumbox').append('<h2>' + playlistName + '</h2>');
     var playlistTracks = PLAYLISTS[playlistNum]['tracks'];
     for(var i = 0; i < playlistTracks.length; i++){
-        $('#albumbox').append('<p >' + playlistTracks[i]['name'] + '</p>');
+        $('#albumbox').append('<p>' + playlistTracks[i]['name'] + '</p>');
     }
 }
 

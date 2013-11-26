@@ -22,18 +22,16 @@ THE SOFTWARE.
 
 // a global variable that will hold a reference to the api swf once it has loaded
 var apiswf = null;
-var domain = "space-james.herokuapp.com";
+// var domain = "space-james.herokuapp.com";
+var domain = 'localhost';
 
 var playback_token = $.get('/get_token', playing);
 
 function playing(playback_token){
-  console.log(playback_token);
-
-
+  
   $(document).ready(function() {
     // on page load use SWFObject to load the API swf into div#apiswf
     // console.log('playback token2: ', playback_token);
-    playback_token = 'GBlSk-guAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNwYWNlLWphbWVzLmhlcm9rdWFwcC5jb22ZwI-GWTrMnNvGEguAVcdV';
     var flashvars = {
       'playbackToken': playback_token, // from token.js
       'domain': domain,                // from token.js
@@ -50,15 +48,51 @@ function playing(playback_token){
 
     // set up the controls
     
-
     $('#play').click(function() {
-        apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+     apiswf.rdio_play('a1228554');
     });
     $('#stop').click(function() { apiswf.rdio_stop(); });
     $('#pause').click(function() { apiswf.rdio_pause(); });
     $('#back').click(function() { apiswf.rdio_previous(); });
     $('#fwd').click(function() { apiswf.rdio_next(); });
-  });
+  
+
+    // $('#play').click(function() 
+    //   {
+    //     console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
+    //     apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+    //     console.log(TRACKNUM);
+    //   });
+
+    // $('#stop').click(function() { apiswf.rdio_stop(); });
+
+    // $('#pause').click(function() { apiswf.rdio_pause(); });
+
+    // $('#back').click(function() 
+    //   { 
+    //     if(parseInt(TRACKNUM - 1) >= 0){
+    //       TRACKNUM = TRACKNUM - 1;
+    //       console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
+    //       apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+    //       console.log(TRACKNUM);
+    //     }
+    //     else{
+    //       console.log('this is the first track');
+    //     }
+    //   });
+    // $('#fwd').click(function() 
+    //   { 
+    //     if(parseInt(TRACKNUM + 1) < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
+    //       TRACKNUM = TRACKNUM + 1;
+    //       console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
+    //       apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
+    //       console.log(TRACKNUM);
+    //     }
+    //     else{
+    //       console.log(parseInt(TRACKNUM), MUSICCOLLECTION[ALBUMNUM]['tracks'].length, 'this is the last track');
+    //     }
+    //   });
+  })
 }
 
 function playMusic(){
