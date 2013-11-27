@@ -206,6 +206,13 @@ p:hover {
     margin-top: 0px;
 }
 
+.playing-song{
+    font-size: 20px;
+    font-weight: bold;
+    color: #cdcdcd;
+}
+
+
 
 
 #directionButtonBox{

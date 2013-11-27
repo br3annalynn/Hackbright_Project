@@ -119,7 +119,7 @@ function fillInAlbumBox(albumNum){
     $('#albumbox').append('<h2>' + albumName + '</h2>');
     var albumTracks = MUSICCOLLECTION[albumNum]['tracks'];
     for(var i = 0; i < albumTracks.length; i++){
-        $('#albumbox').append('<p class="song" id="song' + i + '" songNumber="' + i + '">' + albumTracks[i]['name'] + '</p>');
+        $('#albumbox').append('<p id="song' + i + '" songNumber="' + i + '">' + albumTracks[i]['name'] + '</p>');
         $('#song' + i).click(playMusic);
     }
 }
@@ -136,13 +136,9 @@ function fillInPlaylistBox(playlistNum){
 
 function highlightName(trackNumber){
     for(var i = 0; i < MUSICCOLLECTION[ALBUMNUM]['tracks'].length; i++){
-        $('#song' + i).css("font-size", "");
-        $('#song' + i).css("font-weight", "");
-        $('#song' + trackNumber).css("color", "gray");
+        $('#song' + i).removeClass("playing-song");
     }
-    $('#song' + trackNumber).css("font-size", "20px");   
-    $('#song' + trackNumber).css("font-weight", "bold");
-    $('#song' + trackNumber).css("color", "#cdcdcd"); 
+    $('#song' + trackNumber).addClass("playing-song");
 }
 
 ////////////////////////////////////

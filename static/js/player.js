@@ -125,15 +125,12 @@ callback_object.playStateChanged = function playStateChanged(playState) {
   if(playState == 2){
     if(CURRENTPLAYED == true){
       TRACKNUM = TRACKNUM + 1;
-      playTrack(TRACKNUM);
       CURRENTPLAYED = false;
+      playTrack(TRACKNUM);
+      
     }
     
   }
-  //   TRACKNUM = TRACKNUM + 1;
-  //   playTrack(TRACKNUM);
-  // }
-  console.log("playstate: ", playState);
 }
 
 callback_object.playingTrackChanged = function playingTrackChanged(playingTrack, sourcePosition) {
