@@ -107,6 +107,7 @@ function playing(playback_token){
 function playMusic(){
   console.log('clicked');
   TRACKNUM = parseInt($(this).attr('songNumber'));
+  console.log("Track number: ", TRACKNUM);
   playTrack(TRACKNUM);
   
 }
@@ -116,7 +117,7 @@ function playTrack(trackNumber){
     var key = MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['key'];
     console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
   }
-  else{
+  else if(BELONGS == "p"){
     var key = PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['key'];
     console.log('playing: ', PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['name']);
   }

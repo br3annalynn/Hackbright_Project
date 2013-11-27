@@ -33,7 +33,9 @@ function buildGalaxy(numOfSolarSystems){
         var solarSystem = new aSolarSystem(numOfPlanets);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS();
-        solarSystem.rotateSS(randNum(0, 1));
+        solarSystem.rotateSS();
+        solarSystem.setToLocal();
+        
 
         GALAXYLIST.push(solarSystem);
         SCENE.add(solarSystem.solarSystemGroup);
@@ -44,7 +46,7 @@ function buildGalaxy(numOfSolarSystems){
 function checkLocations(potentialLocation){
     // console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 10000 + GALAXYLIST[i].distanceToView){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 10000){
             return false;
         }
     }
@@ -57,7 +59,8 @@ function aSolarSystem(numOfPlanets){
     this.solarSystemGroup = null;
     this.solarSystemLocation = new THREE.Vector3(0,0,0);
     //set distance to view to 800 outside last orbit ring
-    this.distanceToView = null;
+    this.toLocation = new THREE.Vector3(0,0,0);
+    this.tipAngle = 0;
 
 
     this.buildSolarSystem = function(){
@@ -96,11 +99,6 @@ function aSolarSystem(numOfPlanets){
             this.solarSystemList.push(planet);
 
         }
-        lastPlanetLocal = this.solarSystemList[this.numOfPlanets - 1].distFromCenter*1.5
-        this.distanceToView = lastPlanetLocal + 2000;
-        //console.log(this.distanceToView);
-
-
         sunlight = new THREE.PointLight(0xFFFFFF, .5, this.numOfPlanets * 1000);
         group.add(sunlight);
 
@@ -126,15 +124,23 @@ function aSolarSystem(numOfPlanets){
         this.solarSystemGroup.translateOnAxis(GALAXYAXIS, randDist);
         this.solarSystemGroup.translateOnAxis(new THREE.Vector3(0, 0, 1), randDist2);
         this.solarSystemLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
-  
+
     }
     
-    this.rotateSS = function(angle){
+    this.rotateSS = function(){
         // console.log('rotating sola system');
-        this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(0, 0, 1), angle);
+        this.tipAngle = randNum(0, 1);
+        this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(0, 0, 1), this.tipAngle);
         this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.35);
     }
     
+    this.setToLocal = function(){
+        var lastPlanetDist = this.solarSystemList[this.numOfPlanets - 1].distFromCenter * 1.5;
+        console.log("tipAngle: ", this.tipAngle);
+        console.log("last planet dist: ", lastPlanetDist);
+        this.toLocation.addVectors(this.solarSystemLocation, new THREE.Vector3(lastPlanetDist * Math.cos(this.tipAngle), lastPlanetDist * Math.sin(this.tipAngle), 2000));
+        console.log("solar system local: ", this.solarSystemLocation, "Added to location: ", this.toLocation);
+    }
 }
 
 function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, isSun){
@@ -224,34 +230,28 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
-        toLocation = new THREE.Vector3(0, 0, 50000);
-        //how far from the object the camera should stop
-        distanceOut = 0;
+        var toLocation = new THREE.Vector3(0, 0, 50000);
     }
     else{
-        toLocation = new THREE.Vector3(0, 0, 0);
-        toLocation.addVectors(currentSolarSystem.solarSystemLocation, new THREE.Vector3(0, 50, currentSolarSystem.distanceToView));
-        //how from from the object the camera should stop
-        distanceOut = 0;
+        var toLocation = currentSolarSystem.toLocation;
     }
     //find directional vector (camera - position)
     var directVector = new THREE.Vector3(toLocation.x - CAMERA.position.x, toLocation.y - CAMERA.position.y, toLocation.z - CAMERA.position.z);
     
     CAMERA.lookAt(currentSolarSystem.solarSystemLocation);
 
-
-    if(CAMERA.position.distanceTo(toLocation) > distanceOut + 4000){
+    if(CAMERA.position.distanceTo(toLocation) > 8000){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0003;
+        COUNTER = COUNTER + 0.00008;
     }
 
-    if(CAMERA.position.distanceTo(toLocation) < distanceOut + 4000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
+    if(CAMERA.position.distanceTo(toLocation) < 8000 && CAMERA.position.distanceTo(toLocation) > 0){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.0003/(4001 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.00008/(8000.09 - CAMERA.position.distanceTo(toLocation));
     }
 }
 

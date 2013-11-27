@@ -212,6 +212,11 @@ p:hover {
     color: #cdcdcd;
 }
 
+.playing-playlist-song{
+    font-weight: bold;
+    color: rgb(133, 23, 50);
+}
+
 .playlist-song{
     margin-top: 0px;
 }

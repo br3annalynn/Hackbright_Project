@@ -66,15 +66,16 @@ function init() {
 
 function showTab() {
     var selectedId = getHash( this.getAttribute('href') );
-    if(selectedId = "playlist_tabs"){
+    if(selectedId == "playlist_tabs"){
         BELONGS = "p";
     }
-    else if(selectedId = "albums_tabs"){
+    else if(selectedId == "albums_tabs"){
         BELONGS = "a";
     }
 
     // Highlight the selected tab, and dim all others.
     // Also show the selected content div, and hide all others.
+
     for ( var id in contentDivs ) {
         if ( id == selectedId ) {
           tabLinks[id].className = 'selected';
@@ -145,14 +146,19 @@ function fillInPlaylistBox(playlistNum){
 function highlightName(trackNumber){
     if(BELONGS =="a"){
         length = MUSICCOLLECTION[ALBUMNUM]['tracks'].length;
+        for(var i = 0; i < length; i++){
+        $('#song' + i).removeClass("playing-song");
+        }
+        $('#song' + trackNumber).addClass("playing-song");
     }
     else{
         length = PLAYLISTS[PLAYLISTNUM]['tracks'].length;
+        for(var i = 0; i < length; i++){
+        $('#playlist-song' + i).removeClass("playing-playlist-song");
+        }
+        $('#playlist-song' + trackNumber).addClass("playing-playlist-song");
     }
-    for(var i = 0; i < length; i++){
-        $('#song' + i).removeClass("playing-song");
-    }
-    $('#song' + trackNumber).addClass("playing-song");
+    
 }
 
 ////////////////////////////////////
