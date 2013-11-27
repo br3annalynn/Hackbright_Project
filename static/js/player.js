@@ -24,6 +24,7 @@ THE SOFTWARE.
 var apiswf = null;
 // var domain = "space-james.herokuapp.com";
 var domain = 'localhost';
+var CURRENTPLAYED = false;
 
 var playback_token = $.get('/get_token', playing);
 
@@ -44,63 +45,54 @@ function playing(playback_token){
     swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
         'apiswf', // the ID of the element that will be replaced with the SWF
         1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
-
-
-    // set up the controls
-    
-    $('#play').click(function() {
-     apiswf.rdio_play('a1228554');
-    });
-    $('#stop').click(function() { apiswf.rdio_stop(); });
-    $('#pause').click(function() { apiswf.rdio_pause(); });
-    $('#back').click(function() { apiswf.rdio_previous(); });
-    $('#fwd').click(function() { apiswf.rdio_next(); });
   
-
-    // $('#play').click(function() 
-    //   {
-    //     console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
-    //     apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
-    //     console.log(TRACKNUM);
-    //   });
+    $('#play').click(function() 
+      {
+        TRACKNUM = 0;
+        playTrack(TRACKNUM);
+      });
 
     // $('#stop').click(function() { apiswf.rdio_stop(); });
 
-    // $('#pause').click(function() { apiswf.rdio_pause(); });
+    $('#pause').click(function() { apiswf.rdio_pause(); });
 
-    // $('#back').click(function() 
-    //   { 
-    //     if(parseInt(TRACKNUM - 1) >= 0){
-    //       TRACKNUM = TRACKNUM - 1;
-    //       console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
-    //       apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
-    //       console.log(TRACKNUM);
-    //     }
-    //     else{
-    //       console.log('this is the first track');
-    //     }
-    //   });
-    // $('#fwd').click(function() 
-    //   { 
-    //     if(parseInt(TRACKNUM + 1) < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
-    //       TRACKNUM = TRACKNUM + 1;
-    //       console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
-    //       apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
-    //       console.log(TRACKNUM);
-    //     }
-    //     else{
-    //       console.log(parseInt(TRACKNUM), MUSICCOLLECTION[ALBUMNUM]['tracks'].length, 'this is the last track');
-    //     }
-    //   });
+    $('#back').click(function() 
+      { 
+        if(TRACKNUM - 1 >= 0){
+          TRACKNUM = TRACKNUM - 1;
+          playTrack(TRACKNUM);
+        }
+        else{
+          console.log('this is the first track');
+        }
+      });
+    $('#fwd').click(function() 
+      { 
+        if(TRACKNUM + 1 < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
+          TRACKNUM = TRACKNUM + 1;
+          playTrack(TRACKNUM);
+        }
+        else{
+          console.log('this is the last track');
+        }
+      });
   })
 }
 
 function playMusic(){
-    console.log('clicked');
-    TRACKNUM = $(this).attr('songNumber');
-    apiswf.rdio_play(MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['key']);
-    console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][TRACKNUM]['name']);
-  }
+  console.log('clicked');
+  TRACKNUM = parseInt($(this).attr('songNumber'));
+  playTrack(TRACKNUM);
+  
+}
+
+function playTrack(trackNumber){
+  var key = MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['key'];
+  apiswf.rdio_play(key);
+  console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
+  highlightName(trackNumber);
+}
+
 
 // the global callback object
 var callback_object = {};
@@ -126,7 +118,22 @@ callback_object.freeRemainingChanged = function freeRemainingChanged(remaining) 
 callback_object.playStateChanged = function playStateChanged(playState) {
   // The playback state has changed.
   // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
-  $('#playState').text(playState);
+
+  if(playState == 1){
+    CURRENTPLAYED = true;
+  }
+  if(playState == 2){
+    if(CURRENTPLAYED == true){
+      TRACKNUM = TRACKNUM + 1;
+      playTrack(TRACKNUM);
+      CURRENTPLAYED = false;
+    }
+    
+  }
+  //   TRACKNUM = TRACKNUM + 1;
+  //   playTrack(TRACKNUM);
+  // }
+  console.log("playstate: ", playState);
 }
 
 callback_object.playingTrackChanged = function playingTrackChanged(playingTrack, sourcePosition) {

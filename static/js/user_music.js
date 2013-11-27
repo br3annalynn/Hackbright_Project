@@ -45,7 +45,6 @@ function init() {
 
     
         $('#username').click(function(){
-            $('#album_title').empty();
             $('#albumbox').empty();
             $('#username').empty();
             $('#playbox').hide();
@@ -123,7 +122,6 @@ function fillInAlbumBox(albumNum){
         $('#albumbox').append('<p class="song" id="song' + i + '" songNumber="' + i + '">' + albumTracks[i]['name'] + '</p>');
         $('#song' + i).click(playMusic);
     }
-    $('#album_title').append(MUSICCOLLECTION[albumNum]['name']);
 }
 
 function fillInPlaylistBox(playlistNum){
@@ -136,6 +134,16 @@ function fillInPlaylistBox(playlistNum){
     }
 }
 
+function highlightName(trackNumber){
+    for(var i = 0; i < MUSICCOLLECTION[ALBUMNUM]['tracks'].length; i++){
+        $('#song' + i).css("font-size", "");
+        $('#song' + i).css("font-weight", "");
+        $('#song' + trackNumber).css("color", "gray");
+    }
+    $('#song' + trackNumber).css("font-size", "20px");   
+    $('#song' + trackNumber).css("font-weight", "bold");
+    $('#song' + trackNumber).css("color", "#cdcdcd"); 
+}
 
 ////////////////////////////////////
 var tabLinks = new Array();

@@ -2,11 +2,11 @@
 function buildScene(){
     // console.log('building scene');
     SCENE = new THREE.Scene();
-    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 60000);
+    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 80000);
     RENDERER = new THREE.WebGLRenderer();
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(RENDERER.domElement);
-    CAMERA.position.z = 30000;
+    CAMERA.position.z = 50000;
    
 }
 
@@ -44,7 +44,7 @@ function buildGalaxy(numOfSolarSystems){
 function checkLocations(potentialLocation){
     // console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 8000 + GALAXYLIST[i].distanceToView){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 10000 + GALAXYLIST[i].distanceToView){
             return false;
         }
     }
@@ -96,8 +96,8 @@ function aSolarSystem(numOfPlanets){
             this.solarSystemList.push(planet);
 
         }
-        lastPlanetLocal = this.solarSystemList[this.numOfPlanets - 1].distFromCenter
-        this.distanceToView = lastPlanetLocal + 1000;
+        lastPlanetLocal = this.solarSystemList[this.numOfPlanets - 1].distFromCenter*1.5
+        this.distanceToView = lastPlanetLocal + 2000;
         //console.log(this.distanceToView);
 
 
@@ -116,8 +116,8 @@ function aSolarSystem(numOfPlanets){
         var potentialLocation = new THREE.Vector3(0,0,0);
         var check = false;
         while(check == false){
-            randDist = randNum(-20000, 20000);
-            randDist2 = randNum(-10000, 10000);
+            randDist = randNum(-30000, 30000);
+            randDist2 = randNum(-20000, 20000);
             potentialLocation = new THREE.Vector3(0,0,0);
             potentialLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
             check = checkLocations(potentialLocation);
@@ -224,7 +224,7 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
-        toLocation = new THREE.Vector3(0, 0, 30000);
+        toLocation = new THREE.Vector3(0, 0, 50000);
         //how far from the object the camera should stop
         distanceOut = 0;
     }

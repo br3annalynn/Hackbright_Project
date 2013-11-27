@@ -7,8 +7,9 @@ body{
     background-image: url('../imgs/stars2.jpg');
     background-color: black;
     color: rgb(40, 40, 50);
-    font-family: 'Droid Serif';
+    font-family: 'Roboto', Arial, sans-serif;
 }
+
 /*css for index.html*/
 #mainbox{
     overflow: hidden;
@@ -43,13 +44,21 @@ body{
 }
 
 a{
+    text-decoration: none;
     color: rgb(133, 23, 50);
 }
 
 /*css for planets.html*/
 #navBar{
-    width: 100%;
+    position: absolute;
+    right: 0px;
+    width: 70px;
     background-color: rgba(40, 40, 50, .7); 
+}
+.navs{
+    /*text-align: center;*/
+    padding-left: 8px;
+    float: left;
 }
 
 
@@ -61,36 +70,46 @@ a{
     /*width: 305px;*/
     background-color: rgba(40, 40, 50, .7);
     color: gray;
-    margin: 20px;
+    /*margin: 20px;*/
+    /*height: 610px;*/
     position: absolute;
 }
 
 #playbox{
     /*width: 305px;*/
-    /*height: 650px;*/
+    /*height: 610px;*/
     background-color: rgba(40, 40, 50, .7);
     color: gray;
-    margin: 20px;
+    /*margin: 20px;*/
     position: absolute;
+    
 }
 
 #user_music{
-    height: 50px;
-    font-size: 26px;
+    font-size: 32px;
     padding-top: 15px;
-    padding-left: 15px;
+    /*padding-left: 23px;*/
+    padding-bottom: 25px;
+    /*text-transform: uppercase;*/
+    font-family: 'Roboto Slab', Georgia, serif;
+    text-align: center;
 }
 
 #username{
     /*height: 50px;*/
-    font-size: 26px;
+    font-size: 32px;
     padding-top: 15px;
-    padding-left: 23px;
+    /*padding-left: 23px;*/
+    padding-bottom: 25px;
+    /*text-transform: uppercase;*/
+    font-family: 'Roboto Slab', Georgia, serif;
+    text-align: center;
 }
 
 #username:hover{
     color: rgb(133, 23, 50);
 }
+
 
 #tabs { 
     list-style-type: none; 
@@ -120,14 +139,18 @@ ul#tabs li a.selected {
 }
 div.tabContent { 
     width: 260px;
+    height: 460px;
     margin: 0 15px 15px 15px;
     border: 1px solid #606060; 
     padding: 8px; 
     background-color: rgba(40, 40, 50, .5); 
+    overflow-y:auto;
+
 }
 div.tabContent.hide { 
     display: none; 
 }
+
 
 p:hover { 
     color: rgb(133, 23, 50);
@@ -137,15 +160,14 @@ p:hover {
 #albumbox{
     width: 260px;
     margin: 0 15px 15px 15px;
-    /*border: 1px solid #606060; */
-    padding: 8px; 
-    /*background-color: rgba(40, 40, 50, .5);*/
+    height: 460px;
+    overflow-y:auto;
 }
 
 
 #songControls{
+    height: 60px;
     padding-left: 15px;
-    /*padding-right: 40px;*/
 }
 
 .musicControls{
@@ -170,24 +192,13 @@ p:hover {
     background-image: url('../imgs/back.png');
 }
 
-#album_title_box{
-    position: absolute;
-    width: 100%;
-    top: 350px;
-}
-
-#album_title{
-    margin: auto;
-    width: 200px;
-    text-align: center;
-}
-
 .artistTitles:hover{
-    color: gray;
+    color: #cdcdcd;
 }
 
 .artistTitles{
     font-weight: bold;
+    color: #cdcdcd;
     margin: 0px;
 }
 
