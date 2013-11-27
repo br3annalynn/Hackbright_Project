@@ -17,6 +17,7 @@ def get_track_info(track):
     single_track['name'] = track.name
     single_track['key'] = track.key
     single_track['duration'] = track.duration.seconds
+    single_track['artist_name']= track.artist_name
     return single_track
 
 

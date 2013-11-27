@@ -66,6 +66,12 @@ function init() {
 
 function showTab() {
     var selectedId = getHash( this.getAttribute('href') );
+    if(selectedId = "playlist_tabs"){
+        BELONGS = "p";
+    }
+    else if(selectedId = "albums_tabs"){
+        BELONGS = "a";
+    }
 
     // Highlight the selected tab, and dim all others.
     // Also show the selected content div, and hide all others.
@@ -130,12 +136,20 @@ function fillInPlaylistBox(playlistNum){
     $('#albumbox').append('<h2>' + playlistName + '</h2>');
     var playlistTracks = PLAYLISTS[playlistNum]['tracks'];
     for(var i = 0; i < playlistTracks.length; i++){
-        $('#albumbox').append('<p>' + playlistTracks[i]['name'] + '</p>');
+        $('#albumbox').append('<p class="artistTitles">' + playlistTracks[i]['artist_name'] + '</p>');
+        $('#albumbox').append('<p id="playlist-song' + i + '" songNumber="' + i + '" class="playlist-song">' + playlistTracks[i]['name'] + '</p>');
+        $('#playlist-song' + i).click(playMusic);
     }
 }
 
 function highlightName(trackNumber){
-    for(var i = 0; i < MUSICCOLLECTION[ALBUMNUM]['tracks'].length; i++){
+    if(BELONGS =="a"){
+        length = MUSICCOLLECTION[ALBUMNUM]['tracks'].length;
+    }
+    else{
+        length = PLAYLISTS[PLAYLISTNUM]['tracks'].length;
+    }
+    for(var i = 0; i < length; i++){
         $('#song' + i).removeClass("playing-song");
     }
     $('#song' + trackNumber).addClass("playing-song");
@@ -150,6 +164,7 @@ var PLAYLISTS;
 var ALBUMNUM = 0;
 var PLAYLISTNUM;
 var TRACKNUM = 0;
+var BELONGS = "a";
 
 result = $.get('/get_playlists', import_playlists);
 

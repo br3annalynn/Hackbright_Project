@@ -26,7 +26,9 @@ var apiswf = null;
 var domain = 'localhost';
 var CURRENTPLAYED = false;
 
-var playback_token = $.get('/get_token', playing);
+// var playback_token = $.get('/get_token', playing);
+var playback_token = 'GAlSlUTmAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTb13eqrog6UaDbCL0fjP4='
+playing(playback_token);
 
 function playing(playback_token){
   
@@ -52,29 +54,52 @@ function playing(playback_token){
         playTrack(TRACKNUM);
       });
 
-    // $('#stop').click(function() { apiswf.rdio_stop(); });
-
     $('#pause').click(function() { apiswf.rdio_pause(); });
 
     $('#back').click(function() 
       { 
-        if(TRACKNUM - 1 >= 0){
+        CURRENTPLAYED = false;
+        if(BELONGS == "a"){
+          if(TRACKNUM - 1 < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
           TRACKNUM = TRACKNUM - 1;
           playTrack(TRACKNUM);
+          }
+          else{
+            console.log('this is the last track on this album');
+          }
         }
         else{
-          console.log('this is the first track');
+          if(TRACKNUM - 1 < PLAYLISTS[PLAYLISTNUM]['tracks'].length){
+          TRACKNUM = TRACKNUM - 1;
+          playTrack(TRACKNUM);
+          }
+          else{
+            console.log('this is the last track on this playlist');
+          }
         }
       });
     $('#fwd').click(function() 
       { 
-        if(TRACKNUM + 1 < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
+        CURRENTPLAYED = false;
+        if(BELONGS == "a"){
+          if(TRACKNUM + 1 < MUSICCOLLECTION[ALBUMNUM]['tracks'].length){
           TRACKNUM = TRACKNUM + 1;
           playTrack(TRACKNUM);
+          }
+          else{
+            console.log('this is the last track on this album');
+          }
         }
         else{
-          console.log('this is the last track');
+          if(TRACKNUM + 1 < PLAYLISTS[PLAYLISTNUM]['tracks'].length){
+          TRACKNUM = TRACKNUM + 1;
+          playTrack(TRACKNUM);
+          }
+          else{
+            console.log('this is the last track on this playlist');
+          }
         }
+        
       });
   })
 }
@@ -87,9 +112,15 @@ function playMusic(){
 }
 
 function playTrack(trackNumber){
-  var key = MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['key'];
+  if(BELONGS == "a"){
+    var key = MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['key'];
+    console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
+  }
+  else{
+    var key = PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['key'];
+    console.log('playing: ', PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['name']);
+  }
   apiswf.rdio_play(key);
-  console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
   highlightName(trackNumber);
 }
 
@@ -118,7 +149,6 @@ callback_object.freeRemainingChanged = function freeRemainingChanged(remaining) 
 callback_object.playStateChanged = function playStateChanged(playState) {
   // The playback state has changed.
   // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
-
   if(playState == 1){
     CURRENTPLAYED = true;
   }
