@@ -105,9 +105,10 @@ function playing(playback_token){
 }
 
 function playMusic(){
-  console.log('clicked');
+  // console.log('clicked');
+  CURRENTPLAYED = false;
   TRACKNUM = parseInt($(this).attr('songNumber'));
-  console.log("Track number: ", TRACKNUM);
+  // console.log("Track number: ", TRACKNUM);
   playTrack(TRACKNUM);
   
 }
@@ -115,11 +116,11 @@ function playMusic(){
 function playTrack(trackNumber){
   if(BELONGS == "a"){
     var key = MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['key'];
-    console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
+    // console.log('playing: ', MUSICCOLLECTION[ALBUMNUM]['tracks'][trackNumber]['name']);
   }
   else if(BELONGS == "p"){
     var key = PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['key'];
-    console.log('playing: ', PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['name']);
+    // console.log('playing: ', PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['name']);
   }
   apiswf.rdio_play(key);
   highlightName(trackNumber);
@@ -147,9 +148,11 @@ callback_object.freeRemainingChanged = function freeRemainingChanged(remaining) 
   $('#remaining').text(remaining);
 }
 
+
 callback_object.playStateChanged = function playStateChanged(playState) {
   // The playback state has changed.
   // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
+  console.log(playState);
   if(playState == 1){
     CURRENTPLAYED = true;
   }
@@ -160,7 +163,6 @@ callback_object.playStateChanged = function playStateChanged(playState) {
       playTrack(TRACKNUM);
       
     }
-    
   }
 }
 

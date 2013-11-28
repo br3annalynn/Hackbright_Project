@@ -150,6 +150,7 @@ function highlightName(trackNumber){
         $('#song' + i).removeClass("playing-song");
         }
         $('#song' + trackNumber).addClass("playing-song");
+        highlightPlanet(BELONGS, trackNumber);
     }
     else{
         length = PLAYLISTS[PLAYLISTNUM]['tracks'].length;
@@ -157,6 +158,7 @@ function highlightName(trackNumber){
         $('#playlist-song' + i).removeClass("playing-playlist-song");
         }
         $('#playlist-song' + trackNumber).addClass("playing-playlist-song");
+        highlightPlanet(BELONGS, trackNumber);
     }
     
 }
