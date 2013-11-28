@@ -159,7 +159,7 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
-            bumpScale: 2
+            bumpScale: 5
         });
 
         var sphere = new THREE.Mesh(geometry, material);
@@ -171,7 +171,7 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
                     color: 0xFFFF66, transparent: false, blending: THREE.AdditiveBlending
             });
             var sprite = new THREE.Sprite( spriteMaterial );
-            sprite.scale.set(2000, 2000, 10.0);
+            sprite.scale.set(2000, 2000, 70.0);
             sphere.add(sprite); // this centers the glow at the mesh
         };
         this.planetGeom = sphere;
@@ -253,11 +253,25 @@ function moveCameraToSS(currentSolarSystem, out){
 }
 
 function highlightPlanet(belongs, trackNumber){
-    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
-    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
-    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
+    if(belongs == "a"){
+        //unhighlist all planets
+        for(var i = 0; i < GALAXYLIST[ALBUMNUM].solarSystemList.length; i++){
+            console.log('yo');
+            var onePlanet = GALAXYLIST[ALBUMNUM].solarSystemList[i];
+            console.log(onePlanet.image);
+            onePlanet.planetGeom.material.map = THREE.ImageUtils.loadTexture(onePlanet.image);
+            onePlanet.planetGeom.material.needsUpdate = true;
+            console.log(onePlanet.planetGeom.material.map);
+            onePlanet.planetGeom.scale.set(1, 1, 1);
+        }
+        //highlight selected planet
+        
+        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
+        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
+        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
+    }
+    
 }
-
 
 function onkeypress(e) {
                

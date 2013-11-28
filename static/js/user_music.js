@@ -149,6 +149,7 @@ function highlightName(trackNumber){
         for(var i = 0; i < length; i++){
         $('#song' + i).removeClass("playing-song");
         }
+        
         $('#song' + trackNumber).addClass("playing-song");
         highlightPlanet(BELONGS, trackNumber);
     }
