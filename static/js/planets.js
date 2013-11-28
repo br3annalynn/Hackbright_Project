@@ -66,8 +66,7 @@ function aSolarSystem(numOfPlanets){
         var randInt = randInteger(0, SUNTEXTURES.length);
         var sunMaterials = SUNTEXTURES[0];
         //speed of sun rotation
-        var sunAngle = - 0.001;
-        var mySun = new aPlanet(300, sunMaterials, 0, sunAngle, 0, true);
+        var mySun = new aPlanet(300, sunMaterials, 0, 0, true);
         var sphere = mySun.buildPlanet();
         mySun.rotAxis();
         group.add(sphere);
@@ -79,14 +78,14 @@ function aSolarSystem(numOfPlanets){
             randInt = randInteger(0, PLANETTEXTURES.length);
             //list of two: image and texture
             var planetMaterials = PLANETTEXTURES[randInt];
-            //make speed slower the further out you go
-            var angle = randNum(4, 7) / 1000;
+            // //make speed slower the further out you go
+            // var angle = randNum(4, 7) / 1000;
             //distance from the sun - moves planets out by 100 each time
             var distance = lastDist + (randNum(130, 300));
             lastDist = distance;
             var startAngle = randNum(0,6);
             randRadius = randNum(30, 100);
-            var planet = new aPlanet(randRadius, planetMaterials, distance, angle, startAngle, false);
+            var planet = new aPlanet(randRadius, planetMaterials, distance, startAngle, false);
             var planetSphere = planet.buildPlanet();
             var planetOrbit = planet.showOrbitPath();
             planet.rotAxis();
@@ -138,7 +137,7 @@ function aSolarSystem(numOfPlanets){
     }
 }
 
-function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, isSun){
+function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun){
     this.radius = radius;
     this.image = IMAGESFOLDER + materials[0];
     this.texture = IMAGESFOLDER + materials[1];
@@ -146,12 +145,18 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
     this.distFromCenter = distFromCenter;
     this.planetGeom = null;
     this.rotAxis = null;
-    this.angleOfRot = angleOfRot;
+    this.angleOfRot = null;
     //angular speed is updated during render and represents the angle around the ellipse
     this.angularSpeed = angularSpeed;
     this.isSun = isSun;
-    this.lengthOfOrbit = null;
-    
+    this.lengthOfOrbit = 2 * Math.PI * Math.sqrt((this.distFromCenter * this.distFromCenter + 1.5 * this.distFromCenter * 1.5 * this.distFromCenter) / 2);
+    if(isSun){
+        this.angleOfRot = -0.002;
+    }
+    else{
+        // set division to length of song
+        this.angleOfRot = this.lengthOfOrbit / 180;
+    }
 
     this.buildPlanet = function(){
         // console.log('building planets geometry and texture');
@@ -190,6 +195,10 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
         return new THREE.Line(geometry, material);
         
     }
+    // this.findOrbitalLength = function(){
+    //     var d = this.distFromCenter;
+    //     this.lengthOfOrbit = 2 * Math.PI * Math.sqrt((this.distFromCenter * this.distFromCenter + 1.5 * this.distFromCenter * 1.5 * this.distFromCenter) / 2);
+    // }
 
     this.rotAxis = function(){
         if(this.isSun){
