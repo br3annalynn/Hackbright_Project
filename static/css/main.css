@@ -51,14 +51,23 @@ a{
 /*css for planets.html*/
 #navBar{
     position: absolute;
+    top: 40px;
     right: 0px;
-    width: 70px;
-    background-color: rgba(40, 40, 50, .7); 
+    width: 90px;
+    background-color: rgba(40, 40, 50, .9); 
+    padding-top: 8px;
+    padding-bottom: 10px;
 }
 .navs{
-    /*text-align: center;*/
-    padding-left: 8px;
-    float: left;
+    padding-left: 25px;
+}
+
+.nav-buttons{
+    color: gray;
+}
+
+.nav-buttons:hover{
+    color: rgb(133, 23, 50);
 }
 
 
@@ -68,7 +77,7 @@ a{
 
 #musicbox{
     /*width: 305px;*/
-    background-color: rgba(40, 40, 50, .7);
+    background-color: rgba(40, 40, 50, .9);
     color: gray;
     /*margin: 20px;*/
     /*height: 610px;*/
@@ -78,7 +87,7 @@ a{
 #playbox{
     /*width: 305px;*/
     /*height: 610px;*/
-    background-color: rgba(40, 40, 50, .7);
+    background-color: rgba(40, 40, 50, .9);
     color: gray;
     /*margin: 20px;*/
     position: absolute;
@@ -151,6 +160,9 @@ div.tabContent.hide {
     display: none; 
 }
 
+p{
+    margin: 8px;
+}
 
 p:hover { 
     color: rgb(133, 23, 50);
@@ -177,19 +189,19 @@ p:hover {
 }
 #play{
     margin-right: 3px;
-    background-image: url('../imgs/play.png');
+    background-image: url('../imgs/newplay.png');
 }
 
 #pause{
     margin-right: 3px;
-    background-image: url('../imgs/pause.png');
+    background-image: url('../imgs/newpause.png');
 }
 #fwd{
-    background-image: url('../imgs/fwd.png');
+    background-image: url('../imgs/newfwd.png');
 }
 #back{
     margin-right: 3px;
-    background-image: url('../imgs/back.png');
+    background-image: url('../imgs/newback.png');
 }
 
 .artistTitles:hover{
@@ -223,11 +235,8 @@ p:hover {
 
 
 
-#directionButtonBox{
+/*#directionButtonBox{
     margin: 20px;
-    /*border-width: 1px;
-    border-style: solid;
-    border-color: gray;*/
     position: absolute;
     right: 10px;
     width: 170px;
@@ -285,8 +294,25 @@ p:hover {
     margin-left: 5px;
     margin-right: 32.5px;
     float: left;
+}*/
+
+#power{
+    position: absolute;
+    bottom: 10px;
+    right: 8px;
 }
 
+.powered{
+    float: left;
+}
+
+#power-pic{
+    margin-top: 4px;
+    margin-left: 8px;
+    width: 45px;
+    height: 15px;
+    background-image: url('../imgs/rdio_thumb.png');
+}
 
 /*red
 rgb(133, 23, 50);*/

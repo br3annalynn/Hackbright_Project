@@ -120,6 +120,7 @@ function playTrack(trackNumber){
   }
   else if(BELONGS == "p"){
     var key = PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['key'];
+    findSS(key);
     // console.log('playing: ', PLAYLISTS[PLAYLISTNUM]['tracks'][trackNumber]['name']);
   }
   apiswf.rdio_play(key);
@@ -152,7 +153,7 @@ callback_object.freeRemainingChanged = function freeRemainingChanged(remaining) 
 callback_object.playStateChanged = function playStateChanged(playState) {
   // The playback state has changed.
   // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
-  console.log(playState);
+  // console.log(playState);
   if(playState == 1){
     CURRENTPLAYED = true;
   }

@@ -28,8 +28,8 @@ function buildGalaxy(numOfSolarSystems){
     
     for(var i = 0; i < numOfSolarSystems; i++){
         // set numOfPlanets to number of songs on album
-        var numOfPlanets = MUSICCOLLECTION[i]['tracks'].length;
-        var solarSystem = new aSolarSystem(numOfPlanets);
+        // var numOfPlanets = MUSICCOLLECTION[i]['tracks'].length;
+        var solarSystem = new aSolarSystem(MUSICCOLLECTION[i]['tracks']);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS();
         solarSystem.rotateSS();
@@ -50,14 +50,15 @@ function checkLocations(potentialLocation){
     return true;
 }
 
-function aSolarSystem(numOfPlanets){
-    this.numOfPlanets = numOfPlanets;
+function aSolarSystem(trackList){
+    this.numOfPlanets = trackList.length;
     this.solarSystemList = [];
     this.solarSystemGroup = null;
     this.solarSystemLocation = new THREE.Vector3(0,0,0);
     //set distance to view to 800 outside last orbit ring
     this.toLocation = new THREE.Vector3(0,0,0);
     this.tipAngle = 0;
+    this.trackList = trackList;
 
 
     this.buildSolarSystem = function(){
@@ -66,7 +67,7 @@ function aSolarSystem(numOfPlanets){
         var randInt = randInteger(0, SUNTEXTURES.length);
         var sunMaterials = SUNTEXTURES[0];
         //speed of sun rotation
-        var mySun = new aPlanet(300, sunMaterials, 0, 0, true);
+        var mySun = new aPlanet(300, sunMaterials, 0, 0, true, 0);
         var sphere = mySun.buildPlanet();
         mySun.rotAxis();
         group.add(sphere);
@@ -76,16 +77,15 @@ function aSolarSystem(numOfPlanets){
         for(var i = 0; i < this.numOfPlanets; i++){
             //number between 0 and 5
             randInt = randInteger(0, PLANETTEXTURES.length);
-            //list of two: image and texture
+            //list of three: image, texture, bump
             var planetMaterials = PLANETTEXTURES[randInt];
-            // //make speed slower the further out you go
-            // var angle = randNum(4, 7) / 1000;
-            //distance from the sun - moves planets out by 100 each time
             var distance = lastDist + (randNum(130, 300));
             lastDist = distance;
             var startAngle = randNum(0,6);
             randRadius = randNum(30, 100);
-            var planet = new aPlanet(randRadius, planetMaterials, distance, startAngle, false);
+            var duration = this.trackList[i]['duration'];
+            // console.log(duration);
+            var planet = new aPlanet(randRadius, planetMaterials, distance, startAngle, false, duration);
             var planetSphere = planet.buildPlanet();
             var planetOrbit = planet.showOrbitPath();
             planet.rotAxis();
@@ -96,10 +96,9 @@ function aSolarSystem(numOfPlanets){
         }
         var sunlight = new THREE.PointLight(0xFFFFFF, .5, this.numOfPlanets * 1000);
         group.add(sunlight);
-
         this.solarSystemGroup = group;
-        
     }
+
 
     this.translateSS = function(){
         //check if the location is too close to a current solar system in the galaxy
@@ -108,7 +107,7 @@ function aSolarSystem(numOfPlanets){
         var potentialLocation = new THREE.Vector3(0,0,0);
         var check = false;
         while(check == false){
-            randDist = randNum(-30000, 30000);
+            randDist = randNum(-50000, 50000);
             randDist2 = randNum(-20000, 20000);
             potentialLocation = new THREE.Vector3(0,0,0);
             potentialLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
@@ -137,10 +136,11 @@ function aSolarSystem(numOfPlanets){
     }
 }
 
-function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun){
+function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duration){
     this.radius = radius;
     this.image = IMAGESFOLDER + materials[0];
     this.texture = IMAGESFOLDER + materials[1];
+    this.bump = materials[2];
     //Planet distance from sun
     this.distFromCenter = distFromCenter;
     this.planetGeom = null;
@@ -150,33 +150,35 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun){
     this.angularSpeed = angularSpeed;
     this.isSun = isSun;
     this.lengthOfOrbit = 2 * Math.PI * Math.sqrt((this.distFromCenter * this.distFromCenter + 1.5 * this.distFromCenter * 1.5 * this.distFromCenter) / 2);
+    // console.log(this.lengthOfOrbit);
     if(isSun){
-        this.angleOfRot = -0.002;
+        this.angleOfRot = 0.002;
     }
     else{
         // set division to length of song
-        this.angleOfRot = this.lengthOfOrbit / 180;
+        this.angleOfRot = this.lengthOfOrbit / (duration * 60 * 500);
     }
 
     this.buildPlanet = function(){
         // console.log('building planets geometry and texture');
-        var geometry = new THREE.SphereGeometry(this.radius, 30, 30);  
+        var geometry = new THREE.SphereGeometry(this.radius, 50, 50);  
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
+            // bumpScale: this.bump
             bumpScale: 5
         });
 
         var sphere = new THREE.Mesh(geometry, material);
         if(isSun){
-            console.log('adding flare');
+            // console.log('adding flare');
             var spriteMaterial = new THREE.SpriteMaterial({ 
                     map: new THREE.ImageUtils.loadTexture( IMAGESFOLDER + 'lensflare.png' ), 
                     useScreenCoordinates: false, alignment: THREE.SpriteAlignment.center,
                     color: 0xFFFF66, transparent: false, blending: THREE.AdditiveBlending
             });
             var sprite = new THREE.Sprite( spriteMaterial );
-            sprite.scale.set(2000, 2000, 70.0);
+            sprite.scale.set(3000, 3000, 70.0);
             sphere.add(sprite); // this centers the glow at the mesh
         };
         this.planetGeom = sphere;
@@ -195,10 +197,6 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun){
         return new THREE.Line(geometry, material);
         
     }
-    // this.findOrbitalLength = function(){
-    //     var d = this.distFromCenter;
-    //     this.lengthOfOrbit = 2 * Math.PI * Math.sqrt((this.distFromCenter * this.distFromCenter + 1.5 * this.distFromCenter * 1.5 * this.distFromCenter) / 2);
-    // }
 
     this.rotAxis = function(){
         if(this.isSun){
@@ -215,23 +213,19 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun){
 
 
     this.updateSpin = function(){
-        this.planetGeom.rotateOnAxis(this.rotAxis, this.angleOfRot);
+        this.planetGeom.rotateOnAxis(this.rotAxis, -0.003);
 
     }
 
     this.updateOrbit = function(){
         //make planets follow an ellpitical path along the xz-plane
-        x_direction = this.distFromCenter*1.5*Math.cos(this.angularSpeed);
-        z_direction = this.distFromCenter*Math.sin(this.angularSpeed);
+        x_direction = this.distFromCenter * 1.5 * Math.cos(this.angularSpeed);
+        z_direction = this.distFromCenter * Math.sin(this.angularSpeed);
 
         this.planetGeom.position.x = x_direction;
         this.planetGeom.position.z = z_direction;
     }
 }
-// function turnToNext(currentSolarSystem, nextSolarSystem){
-//     var travelVector = new THREE.Vector3(nextSolarSystem.solarSystemLocation.x - currentSolarSystem.solarSystemLocation.x, nextSolarSystem.solarSystemLocation.y - currentSolarSystem.solarSystemLocation.y, nextSolarSystem.solarSystemLocation.z - currentSolarSystem.solarSystemLocation.z);
-//     if(CAMERA.)
-// }
 
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
@@ -265,12 +259,9 @@ function highlightPlanet(belongs, trackNumber){
     if(belongs == "a"){
         //unhighlist all planets
         for(var i = 0; i < GALAXYLIST[ALBUMNUM].solarSystemList.length; i++){
-            console.log('yo');
             var onePlanet = GALAXYLIST[ALBUMNUM].solarSystemList[i];
-            console.log(onePlanet.image);
             onePlanet.planetGeom.material.map = THREE.ImageUtils.loadTexture(onePlanet.image);
             onePlanet.planetGeom.material.needsUpdate = true;
-            console.log(onePlanet.planetGeom.material.map);
             onePlanet.planetGeom.scale.set(1, 1, 1);
         }
         //highlight selected planet
@@ -280,6 +271,18 @@ function highlightPlanet(belongs, trackNumber){
         GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
     }
     
+}
+
+function findSS(key){
+    for(var i = 0; i < MUSICCOLLECTION.length; i++){
+        for(var x = 0; x < MUSICCOLLECTION[i]['tracks'].length; x++){
+            if(MUSICCOLLECTION[i]['tracks'][x]['key'] == key){
+                ALBUMNUM = x;
+                ALBUMCLICKED = true;
+                break;
+            }
+        }
+    }
 }
 
 function onkeypress(e) {
@@ -305,15 +308,9 @@ function onkeypress(e) {
         CAMERA.position.y = CAMERA.position.y - 20;
     }
 }
-var VECTOR = new THREE.Vector3(0, 0, 0);
+
 //this creates a loop that runs every 60th of a sec
 function render(){
-
-    // if(HIGHLIGHT){
-    //     //th planet that is playing
-    //     GALAXYLIST[ALBUMNUM].solarSystemList[PLANETPLAYING + 1].
-    //     console.log(GALAXYLIST[ALBUMNUM].solarSystemList[PLANETPLAYING + 1]);
-    // }
 
     for(var i = 0; i < GALAXYLIST.length; i++){
         for(var x = 0; x < GALAXYLIST[i].solarSystemList.length; x++){
@@ -374,17 +371,16 @@ var IMAGESFOLDER = "../static/images/"
  */
 
 var PLANETTEXTURES = [
-    ["jupitermap.jpg", "marsbump1k.jpg"],
-    ["marsmap1k.jpg", "marsbump1k.jpg"],
-    ["mercurymap.jpg", "mercurybump.jpg"],
-    ["moonmap1k.jpg", "moonbump1k.jpg"],
-    ["plutomap1k.jpg", "plutobump1k.jpg"],
-    ["saturnmap.jpg", "plutobump1k.jpg"],
-    ["venusmap.jpg", "venusbump.jpg"],
-    ["neptunemap.jpg", "mercurybump.jpg"],
-    ["uranusmap.jpg", "venusbump.jpg"]
+    ["jupitermap.jpg", "marsbump1k.jpg", 0.02],
+    ["marsmap1k.jpg", "marsbump1k.jpg", 0.05],
+    ["mercurymap.jpg", "mercurybump.jpg", 0.005],
+    ["plutomap1k.jpg", "plutobump1k.jpg", 0.005],
+    ["saturnmap.jpg", "plutobump1k.jpg", 0.05],
+    ["venusmap.jpg", "venusbump.jpg", 0.005],
+    ["neptunemap.jpg", "mercurybump.jpg", 0.005],
+    ["uranusmap.jpg", "venusbump.jpg", 5]
 ];
-
+// ["moonmap1k.jpg", "moonbump1k.jpg", 0.002],
 var SONGTEXTURES = ["earthmap1k.jpg", "earthbump1k.jpg"];
 
 

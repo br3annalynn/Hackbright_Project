@@ -187,6 +187,13 @@ function import_playlists(result){
     init();
 }
 
+$(document).ready(function() {
+    console.log('ready!');
+    // $(".loading").hide();
+    });
+
+
+
 
 
 
