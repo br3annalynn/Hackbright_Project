@@ -48,13 +48,27 @@ function playing(playback_token){
         'apiswf', // the ID of the element that will be replaced with the SWF
         1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
   
+
     $('#play').click(function() 
       {
         TRACKNUM = 0;
         playTrack(TRACKNUM);
       });
+    $('#play').mousedown(function(){
+      $(this).css({'background-image': "url('../static/imgs/redplay.png')"})});
+    $('#play').mouseup(function(){
+      $(this).css({'background-image': "url('../static/imgs/newplay.png')"})});
+    $('#play').mouseout(function(){
+      $(this).css({'background-image': "url('../static/imgs/newplay.png')"})});
+
 
     $('#pause').click(function() { apiswf.rdio_pause(); });
+    $('#pause').mousedown(function(){
+      $(this).css({'background-image': "url('../static/imgs/redpause.png')"})});
+    $('#pause').mouseup(function(){
+      $(this).css({'background-image': "url('../static/imgs/newpause.png')"})});
+    $('#pause').mouseout(function(){
+      $(this).css({'background-image': "url('../static/imgs/newpause.png')"})});
 
     $('#back').click(function() 
       { 
@@ -78,6 +92,14 @@ function playing(playback_token){
           }
         }
       });
+    $('#back').mousedown(function(){
+      $(this).css({'background-image': "url('../static/imgs/redback.png')"})});
+    $('#back').mouseup(function(){
+      $(this).css({'background-image': "url('../static/imgs/newback.png')"})});
+    $('#back').mouseout(function(){
+      $(this).css({'background-image': "url('../static/imgs/newback.png')"})});
+
+
     $('#fwd').click(function() 
       { 
         CURRENTPLAYED = false;
@@ -101,6 +123,13 @@ function playing(playback_token){
         }
         
       });
+    $('#fwd').mousedown(function(){
+      $(this).css({'background-image': "url('../static/imgs/redfwd.png')"})});
+    $('#fwd').mouseup(function(){
+      $(this).css({'background-image': "url('../static/imgs/newfwd.png')"})});
+    $('#fwd').mouseout(function(){
+      $(this).css({'background-image': "url('../static/imgs/newfwd.png')"})});
+
   })
 }
 
@@ -108,7 +137,6 @@ function playMusic(){
   // console.log('clicked');
   CURRENTPLAYED = false;
   TRACKNUM = parseInt($(this).attr('songNumber'));
-  // console.log("Track number: ", TRACKNUM);
   playTrack(TRACKNUM);
   
 }

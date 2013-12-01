@@ -27,7 +27,7 @@ Markdown(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("planets.html")
 
 @app.route("/login")
 def login():
@@ -85,9 +85,9 @@ def register_user():
         flash("You've been added. Please sign-in below.")
         return redirect(url_for("login"))
 
-@app.route("/planets")
-def show_planets():
-    return render_template("planets.html")
+# @app.route("/planets")
+# def show_planets():
+#     return render_template("planets.html")
 
 
 @app.route("/get_music_collection")
