@@ -185,12 +185,11 @@ function import_playlists(result){
     USERNAME = data['user_name'].split(" ")[0];
     fillInMusicbox();
     init();
+    //hide after 5 seconds
+    // $("#loading").hide(1000 * 5);  
 }
 
-$(document).ready(function() {
-    console.log('ready!');
-    // $(".loading").hide();
-    });
+
 
 
 

@@ -27,8 +27,6 @@ function buildGalaxy(numOfSolarSystems){
     SCENE.add(light);
     
     for(var i = 0; i < numOfSolarSystems; i++){
-        // set numOfPlanets to number of songs on album
-        // var numOfPlanets = MUSICCOLLECTION[i]['tracks'].length;
         var solarSystem = new aSolarSystem(MUSICCOLLECTION[i]['tracks']);
         solarSystem.buildSolarSystem();
         solarSystem.translateSS();
@@ -55,7 +53,6 @@ function aSolarSystem(trackList){
     this.solarSystemList = [];
     this.solarSystemGroup = null;
     this.solarSystemLocation = new THREE.Vector3(0,0,0);
-    //set distance to view to 800 outside last orbit ring
     this.toLocation = new THREE.Vector3(0,0,0);
     this.tipAngle = 0;
     this.trackList = trackList;
@@ -94,7 +91,7 @@ function aSolarSystem(trackList){
             this.solarSystemList.push(planet);
 
         }
-        var sunlight = new THREE.PointLight(0xFFFFFF, .5, this.numOfPlanets * 1000);
+        var sunlight = new THREE.PointLight(0xFFFFFF, .8, this.numOfPlanets * 1000);
         group.add(sunlight);
         this.solarSystemGroup = group;
     }
@@ -122,7 +119,7 @@ function aSolarSystem(trackList){
     
     this.rotateSS = function(){
         // console.log('rotating solar system');
-        this.tipAngle = randNum(0, 1);
+        this.tipAngle = randNum(0, .7);
         this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(0, 0, 1), this.tipAngle);
         this.solarSystemGroup.rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.35);
     }
@@ -131,9 +128,9 @@ function aSolarSystem(trackList){
         var lastPlanetDist = this.solarSystemList[this.numOfPlanets - 1].distFromCenter * 1.5;
         // console.log("tipAngle: ", this.tipAngle);
         // console.log("last planet dist: ", lastPlanetDist);
-        this.toLocation.addVectors(this.solarSystemLocation, new THREE.Vector3(lastPlanetDist * Math.cos(this.tipAngle), lastPlanetDist * Math.sin(this.tipAngle), 2000));
+        this.toLocation.addVectors(this.solarSystemLocation, new THREE.Vector3(lastPlanetDist * Math.cos(this.tipAngle), lastPlanetDist * Math.sin(this.tipAngle), lastPlanetDist + 1500));
         // console.log("solar system local: ", this.solarSystemLocation, "Added to location: ", this.toLocation);
-    }
+    } 
 }
 
 function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duration){
@@ -156,12 +153,12 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
     }
     else{
         // set division to length of song
-        this.angleOfRot = this.lengthOfOrbit / (duration * 60 * 500);
+        this.angleOfRot = this.lengthOfOrbit / (duration * 60 * 1000);
     }
 
     this.buildPlanet = function(){
         // console.log('building planets geometry and texture');
-        var geometry = new THREE.SphereGeometry(this.radius, 50, 50);  
+        var geometry = new THREE.SphereGeometry(this.radius, 100, 100);  
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
@@ -192,7 +189,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
         var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .5, transparent: true} );
         for(var i = 0; i < 360; i++){
             var thetha = i * Math.PI / 180;
-            geometry.vertices.push( new THREE.Vector3(this.distFromCenter*1.5*Math.cos(thetha), 0,  distFromCenter*Math.sin(thetha))) 
+            geometry.vertices.push( new THREE.Vector3(this.distFromCenter * 1.5 * Math.cos(thetha), 0,  distFromCenter * Math.sin(thetha))) 
         }
         return new THREE.Line(geometry, material);
         
@@ -256,20 +253,20 @@ function moveCameraToSS(currentSolarSystem, out){
 }
 
 function highlightPlanet(belongs, trackNumber){
-    if(belongs == "a"){
-        //unhighlist all planets
-        for(var i = 0; i < GALAXYLIST[ALBUMNUM].solarSystemList.length; i++){
-            var onePlanet = GALAXYLIST[ALBUMNUM].solarSystemList[i];
-            onePlanet.planetGeom.material.map = THREE.ImageUtils.loadTexture(onePlanet.image);
-            onePlanet.planetGeom.material.needsUpdate = true;
-            onePlanet.planetGeom.scale.set(1, 1, 1);
-        }
-        //highlight selected planet
-        
-        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
-        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
-        GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
+    
+    //unhighlight all planets
+    for(var i = 0; i < GALAXYLIST[ALBUMNUM].solarSystemList.length; i++){
+        var onePlanet = GALAXYLIST[ALBUMNUM].solarSystemList[i];
+        onePlanet.planetGeom.material.map = THREE.ImageUtils.loadTexture(onePlanet.image);
+        onePlanet.planetGeom.material.needsUpdate = true;
+        onePlanet.planetGeom.scale.set(1, 1, 1);
     }
+    //highlight selected planet
+    
+    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
+    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
+    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
+
     
 }
 
@@ -277,7 +274,7 @@ function findSS(key){
     for(var i = 0; i < MUSICCOLLECTION.length; i++){
         for(var x = 0; x < MUSICCOLLECTION[i]['tracks'].length; x++){
             if(MUSICCOLLECTION[i]['tracks'][x]['key'] == key){
-                ALBUMNUM = x;
+                ALBUMNUM = i;
                 ALBUMCLICKED = true;
                 break;
             }

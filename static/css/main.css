@@ -6,9 +6,16 @@
 body{
     background-image: url('../imgs/stars2.jpg');
     background-color: black;
-    color: rgb(40, 40, 50);
+    /*color: rgb(40, 40, 50);*/
+    color: gray;
     font-family: 'Roboto', Arial, sans-serif;
 }
+
+/*#loading{
+    position: absolute;
+    height: 500px;
+    width: 500px;
+}*/
 
 /*css for index.html*/
 #mainbox{

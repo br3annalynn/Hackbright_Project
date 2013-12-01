@@ -40,7 +40,7 @@ def get_user_collection(user_info):
         for track in tracks:
             album['tracks'].append(get_track_info(track))
         collection.append(album)
-
+    # print collection
     return json.dumps({'user_name': current_user.name, 'collection': collection})
 
 ##### Gets user's playlists
