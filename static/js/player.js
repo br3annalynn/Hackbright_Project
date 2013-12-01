@@ -132,7 +132,6 @@ function playTrack(trackNumber){
 var callback_object = {};
 
 callback_object.ready = function ready(user) {
-  console.log('ready');
   // Called once the API SWF has loaded and is ready to accept method calls.
 
   // find the embed/object element

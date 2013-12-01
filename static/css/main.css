@@ -13,10 +13,10 @@ body{
 
 /*#loading{
     position: absolute;
-    height: 500px;
-    width: 500px;
-}*/
-
+    height: 800px;
+    width: 800px;
+}
+*/
 /*css for index.html*/
 #mainbox{
     overflow: hidden;

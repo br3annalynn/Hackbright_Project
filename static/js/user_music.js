@@ -69,7 +69,7 @@ function showTab() {
     if(selectedId == "playlist_tabs"){
         BELONGS = "p";
     }
-    else if(selectedId == "albums_tabs"){
+    else{
         BELONGS = "a";
     }
 

@@ -2,11 +2,11 @@
 function buildScene(){
     // console.log('building scene');
     SCENE = new THREE.Scene();
-    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 80000);
+    CAMERA = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100000);
     RENDERER = new THREE.WebGLRenderer();
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(RENDERER.domElement);
-    CAMERA.position.z = 50000;
+    CAMERA.position.z = 10000;
    
 }
 
@@ -41,7 +41,7 @@ function buildGalaxy(numOfSolarSystems){
 function checkLocations(potentialLocation){
     // console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 10000){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 8000){
             return false;
         }
     }
@@ -158,7 +158,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
 
     this.buildPlanet = function(){
         // console.log('building planets geometry and texture');
-        var geometry = new THREE.SphereGeometry(this.radius, 100, 100);  
+        var geometry = new THREE.SphereGeometry(this.radius, 20, 20);  
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
@@ -227,7 +227,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
-        var toLocation = new THREE.Vector3(0, 0, 50000);
+        var toLocation = new THREE.Vector3(0, 0, 80000);
     }
     else{
         var toLocation = currentSolarSystem.toLocation;
@@ -248,7 +248,7 @@ function moveCameraToSS(currentSolarSystem, out){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.00008/(8000.09 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.00008/(8000.009 - CAMERA.position.distanceTo(toLocation));
     }
 }
 
@@ -262,7 +262,6 @@ function highlightPlanet(belongs, trackNumber){
         onePlanet.planetGeom.scale.set(1, 1, 1);
     }
     //highlight selected planet
-    
     GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
     GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
     GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
@@ -282,28 +281,39 @@ function findSS(key){
     }
 }
 
-function onkeypress(e) {
+function onKeyPress(e) {
                
     if (e.keyCode == '37') {
         e.preventDefault();
         console.log('left pressed');
-        CAMERA.position.x = CAMERA.position.x - 10;
+        GALAXYLIST[ALBUMNUM].toLocation.x = GALAXYLIST[ALBUMNUM].toLocation.x - 100;
     }
-    else if (e.keyCode == '38') {
+    else if (e.keyCode == '38' && !e.shiftKey) {
         e.preventDefault();
         console.log('up pressed');
-        CAMERA.position.y = CAMERA.position.y + 20;
+        GALAXYLIST[ALBUMNUM].toLocation.y = GALAXYLIST[ALBUMNUM].toLocation.y + 100;
     }
     else if (e.keyCode == '39') {
         e.preventDefault();
         console.log('right pressed');
-        CAMERA.position.x = CAMERA.position.x + 20;
+        GALAXYLIST[ALBUMNUM].toLocation.x = GALAXYLIST[ALBUMNUM].toLocation.x + 100;
     }
-    else if (e.keyCode == '40') {
+    else if (e.keyCode == '40' && !e.shiftKey) {
         e.preventDefault();
-        console.log('down pressed');
-        CAMERA.position.y = CAMERA.position.y - 20;
+        console.log('down pressed', e.shiftKey);
+        GALAXYLIST[ALBUMNUM].toLocation.y = GALAXYLIST[ALBUMNUM].toLocation.y - 100;
     }
+    else if (e.keyCode == '38' && e.shiftKey) {
+        e.preventDefault();
+        console.log('up and shift pressed');
+        GALAXYLIST[ALBUMNUM].toLocation.z = GALAXYLIST[ALBUMNUM].toLocation.z - 100;
+    }
+    else if (e.keyCode == '40' && e.shiftKey) {
+        e.preventDefault();
+        console.log('down and shift pressed');
+        GALAXYLIST[ALBUMNUM].toLocation.z = GALAXYLIST[ALBUMNUM].toLocation.z + 100;
+    }
+
 }
 
 //this creates a loop that runs every 60th of a sec
@@ -319,7 +329,7 @@ function render(){
     
     RENDERER.render(SCENE, CAMERA);
   
-    if (ALBUMCLICKED){
+    if(ALBUMCLICKED){
         moveCameraToSS(GALAXYLIST[ALBUMNUM], false);
         }
     
@@ -339,14 +349,14 @@ function main(){
     var numOfSS = MUSICCOLLECTION.length;
     buildGalaxy(numOfSS);
     
-    document.addEventListener('keypress', onkeypress, false);
-    //////////change from click to while clicked
-    $('#upButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y + 50});
-    $('#downButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y - 50});
-    $('#leftButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x - 50});
-    $('#rightButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x + 50});
-    $('#outButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z + 50});
-    $('#inButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z - 50});
+    document.addEventListener('keypress', onKeyPress, false);
+    // //////////change from click to while clicked
+    // $('#upButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y + 50});
+    // $('#downButton').mousedown(function(e){CAMERA.position.y = CAMERA.position.y - 50});
+    // $('#leftButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x - 50});
+    // $('#rightButton').mousedown(function(e){CAMERA.position.x = CAMERA.position.x + 50});
+    // $('#outButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z + 50});
+    // $('#inButton').mousedown(function(e){CAMERA.position.z = CAMERA.position.z - 50});
 
 
     //render the SCENE
@@ -375,7 +385,12 @@ var PLANETTEXTURES = [
     ["saturnmap.jpg", "plutobump1k.jpg", 0.05],
     ["venusmap.jpg", "venusbump.jpg", 0.005],
     ["neptunemap.jpg", "mercurybump.jpg", 0.005],
-    ["uranusmap.jpg", "venusbump.jpg", 5]
+    ["uranusmap.jpg", "venusbump.jpg", 5],
+    ["planet7.png", "venusbump.jpg", 5],
+    ["planet1.png", "venusbump.jpg", 5],
+    ["planet2.png", "venusbump.jpg", 5],
+    ["planet3.png", "venusbump.jpg", 5],
+    ["planet4.jpg", "venusbump.jpg", 5],
 ];
 // ["moonmap1k.jpg", "moonbump1k.jpg", 0.002],
 var SONGTEXTURES = ["earthmap1k.jpg", "earthbump1k.jpg"];
