@@ -44,9 +44,26 @@ function playing(playback_token){
       'allowScriptAccess': 'always'
     };
     var attributes = {};
-    swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
+
+    //check for internet
+    function setSwf(){
+      swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
         'apiswf', // the ID of the element that will be replaced with the SWF
         1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
+    }
+
+    function noSwf(){
+      console.log("There is no internet. Music will not play.");
+    }
+
+    var i = new Image();
+    i.onload = setSwf;
+    i.onerror = noSwf;
+    i.src = "https://www.google.com/images/srpr/chrome_ntp_white_logo2.png";
+
+    // swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
+    //     'apiswf', // the ID of the element that will be replaced with the SWF
+    //     1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
   
 
     $('#play').click(function() 

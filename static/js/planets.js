@@ -41,7 +41,7 @@ function buildGalaxy(numOfSolarSystems){
 function checkLocations(potentialLocation){
     // console.log('checking for location against list:', GALAXYLIST);
     for(var i = 0; i < GALAXYLIST.length; i++){
-        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 8000){
+        if(potentialLocation.distanceTo(GALAXYLIST[i].solarSystemLocation) < 10000){
             return false;
         }
     }
@@ -101,7 +101,7 @@ function aSolarSystem(trackList){
         var potentialLocation = new THREE.Vector3(0,0,0);
         var check = false;
         while(check == false){
-            randDist = randNum(-50000, 50000);
+            randDist = randNum(-60000, 60000);
             randDist2 = randNum(-20000, 20000);
             potentialLocation = new THREE.Vector3(0,0,0);
             potentialLocation.addVectors(new THREE.Vector3(GALAXYAXIS.x * randDist, GALAXYAXIS.y * randDist, GALAXYAXIS.z * randDist), new THREE.Vector3(0, 0, randDist2));
