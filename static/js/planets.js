@@ -150,7 +150,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
 
     this.buildPlanet = function(){
         // console.log('building planets geometry and texture');
-        var geometry = new THREE.SphereGeometry(this.radius, 20, 20);  
+        var geometry = new THREE.SphereGeometry(this.radius, 15, 15);  
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
@@ -221,7 +221,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
 function moveCameraToSS(currentSolarSystem, out){
     //find directional vector (camera - position)
     if(out){
-        var toLocation = new THREE.Vector3(0, 0, 80000);
+        var toLocation = new THREE.Vector3(0, 0, 70000);
     }
     else{
         var toLocation = currentSolarSystem.toLocation;
@@ -230,6 +230,14 @@ function moveCameraToSS(currentSolarSystem, out){
     var directVector = new THREE.Vector3(toLocation.x - CAMERA.position.x, toLocation.y - CAMERA.position.y, toLocation.z - CAMERA.position.z);
     
     CAMERA.lookAt(currentSolarSystem.solarSystemLocation);
+
+    // if(CAMERA.position.distanceTo(toLocation) > 20000){
+    //     CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
+    //     CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
+    //     CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
+    //     COUNTER = COUNTER + 0.8/(CAMERA.position.distanceTo(toLocation) - 7999.99);
+    // }
+    //CAMERA.position.distanceTo(toLocation) < 20000 && 
 
     if(CAMERA.position.distanceTo(toLocation) > 8000){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
@@ -250,15 +258,17 @@ function highlightPlanet(belongs, trackNumber){
     
     //unhighlight all planets
     for(var i = 0; i < GALAXYLIST[ALBUMNUM].solarSystemList.length; i++){
+        var scaleFactor = GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].radius / 150;
         var onePlanet = GALAXYLIST[ALBUMNUM].solarSystemList[i];
         onePlanet.planetGeom.material.map = THREE.ImageUtils.loadTexture(onePlanet.image);
         onePlanet.planetGeom.material.needsUpdate = true;
         onePlanet.planetGeom.scale.set(1, 1, 1);
     }
     //highlight selected planet
+    var scaleFactor = 150 / GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].radius;
     GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.map = THREE.ImageUtils.loadTexture(IMAGESFOLDER + SONGTEXTURES[0]);
     GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.material.needsUpdate = true;
-    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(2, 2, 2);
+    GALAXYLIST[ALBUMNUM].solarSystemList[trackNumber + 1].planetGeom.scale.set(scaleFactor, scaleFactor, scaleFactor);
 }
 
 function findSS(key){
@@ -365,11 +375,11 @@ var PLANETTEXTURES = [
     ["venusmap.jpg", "venusbump.jpg"],
     ["neptunemap.jpg", "mercurybump.jpg"],
     ["uranusmap.jpg", "venusbump.jpg"],
-    ["planet7.png", "venusbump.jpg"],
-    ["planet1.png", "venusbump.jpg"],
-    ["planet2.png", "venusbump.jpg"],
-    ["planet3.png", "venusbump.jpg"],
-    ["planet4.jpg", "venusbump.jpg"],
+    // ["planet7.png", "venusbump.jpg"],
+    // ["planet1.png", "venusbump.jpg"],
+    // ["planet2.png", "venusbump.jpg"],
+    // ["planet3.png", "venusbump.jpg"],
+    // ["planet4.jpg", "venusbump.jpg"],
 ];
 // ["moonmap1k.jpg", "moonbump1k.jpg", 0.002],
 var SONGTEXTURES = ["earthmap1k.jpg", "earthbump1k.jpg"];

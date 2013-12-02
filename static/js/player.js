@@ -55,7 +55,7 @@ function playing(playback_token){
         playTrack(TRACKNUM);
       });
     $('#play').mousedown(function(){
-      $(this).css({'background-image': "url('../static/imgs/redplay.png')"})});
+      $(this).css({'background-image': "url('../static/imgs/deepplay.png')"})});
     $('#play').mouseup(function(){
       $(this).css({'background-image': "url('../static/imgs/newplay.png')"})});
     $('#play').mouseout(function(){
@@ -64,7 +64,7 @@ function playing(playback_token){
 
     $('#pause').click(function() { apiswf.rdio_pause(); });
     $('#pause').mousedown(function(){
-      $(this).css({'background-image': "url('../static/imgs/redpause.png')"})});
+      $(this).css({'background-image': "url('../static/imgs/deeppause.png')"})});
     $('#pause').mouseup(function(){
       $(this).css({'background-image': "url('../static/imgs/newpause.png')"})});
     $('#pause').mouseout(function(){
@@ -93,7 +93,7 @@ function playing(playback_token){
         }
       });
     $('#back').mousedown(function(){
-      $(this).css({'background-image': "url('../static/imgs/redback.png')"})});
+      $(this).css({'background-image': "url('../static/imgs/deepback.png')"})});
     $('#back').mouseup(function(){
       $(this).css({'background-image': "url('../static/imgs/newback.png')"})});
     $('#back').mouseout(function(){
@@ -124,7 +124,7 @@ function playing(playback_token){
         
       });
     $('#fwd').mousedown(function(){
-      $(this).css({'background-image': "url('../static/imgs/redfwd.png')"})});
+      $(this).css({'background-image': "url('../static/imgs/deepfwd.png')"})});
     $('#fwd').mouseup(function(){
       $(this).css({'background-image': "url('../static/imgs/newfwd.png')"})});
     $('#fwd').mouseout(function(){

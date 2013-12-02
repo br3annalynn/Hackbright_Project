@@ -186,7 +186,7 @@ function import_playlists(result){
     fillInMusicbox();
     init();
     //hide after 5 seconds
-    $("#loading").hide(1000 * 5);  
+    $("#loading").slideUp(1000 * 5);  
 }
 
 
