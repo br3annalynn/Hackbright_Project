@@ -5,7 +5,6 @@ function buildScene(){
     RENDERER = new THREE.WebGLRenderer();
     RENDERER.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(RENDERER.domElement);
-    // CAMERA.position.z = 8000;
     CAMERA.position = new THREE.Vector3(600, 0, 600);
    
 }
@@ -50,8 +49,6 @@ function aSolarSystem(numOfPlanets, randDist){
         this.solarSystemList.push(mySun);
         var picCount = 0;
         for(var i = 0; i < this.numOfPlanets; i++){
-            //number between 0 and 5
-            randInt = Math.floor(randNum(0, 5));
             var planetMaterials = PLANETTEXTURES[picCount];
             //make speed slower the further out you go
             var angle = (5 - i) / 1000; ///fix for i = 5
@@ -99,18 +96,15 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
   
 
     this.buildPlanet = function(){
-        // console.log('building planets geometry and texture');
         var geometry = new THREE.SphereGeometry(this.radius, 30, 30);  
         var material = new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture(this.image),
             bumpMap: THREE.ImageUtils.loadTexture(this.texture),
-            // bumpScale: this.bump
             bumpScale: 3
         });
 
         var sphere = new THREE.Mesh(geometry, material);
         if(isSun){
-            // console.log('adding flare');
             var spriteMaterial = new THREE.SpriteMaterial({ 
                     map: new THREE.ImageUtils.loadTexture( IMAGESFOLDER + 'lensflare.png' ), 
                     useScreenCoordinates: false, 
@@ -175,9 +169,7 @@ function moveCameraToSS(currentSolarSystem, out){
     else{
         toLocation = currentSolarSystem.solarSystemLocation;
         //how from from the object the camera should stop
-        // distanceOut = 1500;
     }
-    //find directional vector (camera - position)
     var directVector = new THREE.Vector3(toLocation.x - CAMERA.position.x, toLocation.y - CAMERA.position.y, toLocation.z - CAMERA.position.z);
         
     CAMERA.lookAt(currentSolarSystem.solarSystemLocation);
@@ -190,7 +182,6 @@ function moveCameraToSS(currentSolarSystem, out){
         COUNTER = COUNTER + 0.008;
     }
 
-    // if(CAMERA.position.distanceTo(toLocation) < distanceOut + 8000 && CAMERA.position.distanceTo(toLocation) > distanceOut){
     if(CAMERA.position.distanceTo(toLocation) < 8000 && CAMERA.position.distanceTo(toLocation) > 500){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
@@ -212,12 +203,8 @@ function render(){
     
     RENDERER.render(SCENE, CAMERA);
   
-    // moveCameraToSS(GALAXYLIST[0], false);
-
     requestAnimationFrame(render);
-
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -225,7 +212,6 @@ function render(){
 var SCENE, CAMERA, RENDERER;
 
 var IMAGESFOLDER = "../static/images/"
-
 
 var PLANETTEXTURES = [
     ["venusmap.jpg", "venusbump.jpg"],

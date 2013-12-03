@@ -13,8 +13,7 @@ function init() {
         }
       }
 
-      // Assign onclick events to the tab links, and
-      // highlight the first tab
+      // Assign onclick events to the tab links, and highlight the first tab
       var i = 0;
 
       for ( var id in tabLinks ) {
@@ -41,8 +40,6 @@ function init() {
             fillInPlaylistBox(PLAYLISTNUM);
             
         });
-
-
     
         $('#username').click(function(){
             $('#albumbox').empty();
@@ -50,7 +47,6 @@ function init() {
             $('#playbox').hide();
             $('#musicbox').show();
             ALBUMCLICKED = false;
-
             
       });
 
@@ -103,6 +99,7 @@ function getHash( url ) {
     return url.substring( hashPos + 1 );
 }
 
+
 function fillInMusicbox(){
     $('#playbox').hide();
     $('#user_music').append(USERNAME, "'s Music");
@@ -120,6 +117,7 @@ function fillInMusicbox(){
     }
 }
 
+
 function fillInAlbumBox(albumNum){
     $('#username').append(USERNAME, "'s Music");
     var albumName = MUSICCOLLECTION[albumNum]['name'];
@@ -130,6 +128,7 @@ function fillInAlbumBox(albumNum){
         $('#song' + i).click(playMusic);
     }
 }
+
 
 function fillInPlaylistBox(playlistNum){
     $('#username').append(USERNAME, "'s Music");
@@ -143,6 +142,7 @@ function fillInPlaylistBox(playlistNum){
     }
 }
 
+
 function highlightName(trackNumber){
     if(BELONGS =="a"){
         length = MUSICCOLLECTION[ALBUMNUM]['tracks'].length;
@@ -153,6 +153,7 @@ function highlightName(trackNumber){
         $('#song' + trackNumber).addClass("playing-song");
         highlightPlanet(BELONGS, trackNumber);
     }
+
     else{
         length = PLAYLISTS[PLAYLISTNUM]['tracks'].length;
         for(var i = 0; i < length; i++){
@@ -161,21 +162,21 @@ function highlightName(trackNumber){
         $('#playlist-song' + trackNumber).addClass("playing-playlist-song");
         highlightPlanet(BELONGS, trackNumber);
     }
-    
 }
+
 
 ////////////////////////////////////
 var tabLinks = new Array();
 var contentDivs = new Array();
 var USERNAME;
 var PLAYLISTS;
-//set to zero so camera knows where to look initially
 var ALBUMNUM = 0;
 var PLAYLISTNUM;
 var TRACKNUM = 0;
 var BELONGS = "a";
 
 result = $.get('/get_playlists', import_playlists);
+
 
 function import_playlists(result){
     // set music collection to a list of album dictionaries
@@ -188,13 +189,5 @@ function import_playlists(result){
     //hide after 5 seconds
     $("#loading").slideUp(1000 * 5);  
 }
-
-
-
-
-
-
-
-
 
 
