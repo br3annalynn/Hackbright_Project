@@ -182,13 +182,14 @@ var RESULTS2;
 function resultsReturned2(result){
     COUNT++;
     RESULTS2 = result;
+    if(COUNT == 2){
+        importPlaylists(RESULTS2);
+        importMusic(RESULTS1);
+    }
 }
 
 
-if(COUNT == 2){
-    importPlaylists(RESULTS2);
-    importMusic(RESULTS1);
-}
+
 
 
 function importPlaylists(result){

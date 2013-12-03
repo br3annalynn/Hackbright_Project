@@ -415,9 +415,13 @@ $.get('/get_music_collection', resultsReturned1);
 
 var COUNT = 0;
 var RESULTS1;
+
 function resultsReturned1(result){
     COUNT++;
     RESULTS1 = result;
+    if(COUNT == 2){
+        importPlaylists(RESULTS2);
+        importMusic(RESULTS1);
     }
 }
 
@@ -427,7 +431,6 @@ function importMusic(result){
     var data = $.parseJSON(result);
     MUSICCOLLECTION = data['collection'];
     main();
-
 }
 
 
