@@ -122,6 +122,9 @@ def get_token():
     token = my_rdio_search.get_user_playback_token(user_info, domain)
     return token
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/clear")
 def clear():

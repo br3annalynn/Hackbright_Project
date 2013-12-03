@@ -24,13 +24,26 @@ body{
     overflow: hidden;
     width: 100%;
     position: absolute;
-    top: 10px;
+    height: 200px;
+    /*top: 10px;*/
     
 }
 
-/*#welcomeText{
+.top-navBar{
+    width: 100%;
+    position: absolute;
+    background-color: rgba(40, 40, 50, .9);
+}
 
-}*/
+.top-navs{
+    padding-left: 25px;
+    float: left;
+}
+
+#welcomeText{
+    margin-top: 100px;
+    color: #cdcdcd;
+}
 
 #welcome{
     /*overflow: hidden;*/
@@ -41,6 +54,7 @@ body{
 }
 
 .buttons{
+    color: white;
     overflow: hidden;
     width: 55px;
     float: left;
@@ -48,12 +62,16 @@ body{
 
 #login_signup{
     overflow: hidden;
-    width: 200px;
+    width: 290px;
     margin: auto;
 }
 
 #login{
-    margin-right: 80px;
+    margin-right: 60px;
+}
+
+#signup{
+    margin-right: 60px;
 }
 
 a{
@@ -61,8 +79,23 @@ a{
     color: rgb(133, 23, 50);
 }
 
+/*css for about.html*/
+#about-box{
+    position: absolute;
+    top: 30px;
+    right: 150px;
+    width: 300px;
+    /*background-color: rgba(40, 40, 50, .9); */
+    padding: 10px;
+    
+}
+
+#title{
+    color: #cdcdcd;
+}
+
 /*css for planets.html*/
-#navBar{
+.navBar{
     position: absolute;
     top: 40px;
     right: 0px;

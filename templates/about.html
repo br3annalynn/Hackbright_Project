@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+    {%block body%}
+        <div class="top-navBar">
+            <div class="top-navs"><a class="nav-buttons" href="/">home</a></div>
+            <div class="top-navs"><a class="nav-buttons" href="{{url_for("show_planets")}}">login</a></div>
+            <div class="top-navs"><a class="nav-buttons" href="{{url_for("get_registration_info")}}">sign up</a></div>
+        </div>
+        <div id="about-box">
+            <h1 id="title">SpaceJamz</h1>
+            SpaceJamz is a 3D space visualization of a user's Rdio music library, inspired by a Bloom project. SpaceJamz visualizes a user's Rdio account in a unique way: each album is represented by a new solar system, where the planets are the songs. Users can play songs, albums, or playlists while the graphics change to the music. 
+            <br><br>
+            Made with: Python, SQLAlchemy, Flask, JavaScript, THREE.js, HTML5 Canvas, WebGL, Rdio API.
+            <br><br>
+            The source code can be found here: <a href="https://github.com/br3annalynn/Hackbright_Project">Source Code</a>
+            <br><br>
+            <a href="http://github.com/br3annalynn"><img src="../static/imgs/new-github.png" border="0" width="40" height="40"></a>
+            <a href="www.linkedin.com/in/breannaturcsanyi/"><img src="../static/imgs/new-linkedin.png" border="0" width="40" height="40"></a>
+        </div>  
+        <script src="../static/js/three.min.js"></script>
+        <script src="../static/js/jquery-2.0.3.js"></script>
+        <script src="../static/js/welcome.js"></script>
+    {% endblock %}

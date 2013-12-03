@@ -1,15 +1,18 @@
 {% extends 'main.html' %}
 
     {%block body%}
-        <div>
-            <div id="show"> <a href="{{url_for("show_planets")}}">planets</a></div>
-        </div>
         <div id="mainbox">
-            <div id="welcome"> <h1 id="welcomeText">Space Jamz</h1></div>
-            <div id="login_signup">
-                <div id="login" class="buttons"> <a href="{{url_for("login")}}">Login</a></div>
-                <div id="signup" class="buttons"><a href="{{url_for("get_registration_info")}}">Sign up</a></div>
+            <div class="top-navBar">
+                <div class="top-navs"><a class="nav-buttons" href="{{url_for("show_planets")}}">login</a></div>
+                <div class="top-navs"><a class="nav-buttons" href="{{url_for("get_registration_info")}}">sign up</a></div>
+                <div class="top-navs"><a class="nav-buttons" href="{{url_for("about")}}">about</a></div>
             </div>
+            <div id="welcome"> <h1 id="welcomeText">SpaceJamz</h1></div>
+            <!-- <div id="login_signup">
+                <div id="login" class="buttons"> <a class="nav-buttons" href="{{url_for("show_planets")}}">Login</a></div>
+                <div id="signup" class="buttons"><a class="nav-buttons" href="{{url_for("get_registration_info")}}">Sign up</a></div>
+                <div id="show" class="buttons"> <a class="nav-buttons" href="{{url_for("about")}}">About</a></div>
+            </div> -->
         </div>  
         <script src="../static/js/three.min.js"></script>
          <script src="../static/js/jquery-2.0.3.js"></script>
