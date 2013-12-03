@@ -411,7 +411,15 @@ var HIGHLIGHT = false;
 
 
 // var result1 = $.get('/get_music_collection', importMusic);
-var result1 = $.get('/get_music_collection', resultsReturned);
+$.get('/get_music_collection', resultsReturned1);
+
+var COUNT = 0;
+var RESULTS1;
+function resultsReturned1(result){
+    COUNT++;
+    RESULTS1 = result;
+    }
+}
 
 function importMusic(result){
     // set music collection to a list of album dictionaries

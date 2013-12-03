@@ -176,16 +176,20 @@ var TRACKNUM = 0;
 var BELONGS = "a";
 
 // result = $.get('/get_playlists', importPlaylists);
-result2 = $.get('/get_playlists', resultsReturned);
+$.get('/get_playlists', resultsReturned2);
 
-var count = 0;
-function resultsReturned(){
-    count = count + 1;
-    if(count == 2){
-        importPlaylists(result2);
-        importMusic(result1);
-    }
+var RESULTS2;
+function resultsReturned2(result){
+    COUNT++;
+    RESULTS2 = result;
 }
+
+
+if(COUNT == 2){
+    importPlaylists(RESULTS2);
+    importMusic(RESULTS1);
+}
+
 
 function importPlaylists(result){
     // set music collection to a list of album dictionaries
