@@ -175,10 +175,19 @@ var PLAYLISTNUM;
 var TRACKNUM = 0;
 var BELONGS = "a";
 
-result = $.get('/get_playlists', import_playlists);
+// result = $.get('/get_playlists', importPlaylists);
+result2 = $.get('/get_playlists', resultsReturned);
 
+var count = 0;
+function resultsReturned(){
+    count = count + 1;
+    if(count == 2){
+        importPlaylists(result2);
+        importMusic(result1);
+    }
+}
 
-function import_playlists(result){
+function importPlaylists(result){
     // set music collection to a list of album dictionaries
 
     var data = $.parseJSON(result);

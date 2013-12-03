@@ -404,15 +404,16 @@ var SUNTEXTURES = [
           
 var GALAXYLIST = [];
 var GALAXYAXIS = new THREE.Vector3(1, .15, 0.1).normalize();
-var MUSICCOLLECTION;
+var MUSICCOLLECTION = [];
 var ALBUMCLICKED = false;
 var COUNTER = 0;
 var HIGHLIGHT = false;
 
 
-var result = $.get('/get_music_collection', import_music);
+// var result1 = $.get('/get_music_collection', importMusic);
+var result1 = $.get('/get_music_collection', resultsReturned);
 
-function import_music(result){
+function importMusic(result){
     // set music collection to a list of album dictionaries
 
     var data = $.parseJSON(result);
