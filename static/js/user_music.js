@@ -175,7 +175,7 @@ var PLAYLISTNUM;
 var TRACKNUM = 0;
 var BELONGS = "a";
 
-// result = $.get('/get_playlists', importPlaylists);
+
 $.get('/get_playlists', resultsReturned2);
 
 var RESULTS2;

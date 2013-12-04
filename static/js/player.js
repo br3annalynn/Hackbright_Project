@@ -22,12 +22,17 @@ THE SOFTWARE.
 
 // a global variable that will hold a reference to the api swf once it has loaded
 var apiswf = null;
+
+//playback token and domain for heroku
 var domain = "space-james.herokuapp.com";
+var playback_token = 'GBlSnnLkAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNwYWNlLWphbWVzLmhlcm9rdWFwcC5jb21qxunLNj4vuIdykkRblEa2';
+
+//playback token and domain for localhost
 // var domain = 'localhost';
-var CURRENTPLAYED = false;
+// var playback_token = 'GAlSlUTmAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTb13eqrog6UaDbCL0fjP4=';
 
 // var playback_token = $.get('/get_token', playing);
-var playback_token = 'GAlSlUTmAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTb13eqrog6UaDbCL0fjP4='
+var CURRENTPLAYED = false;
 playing(playback_token);
 
 function playing(playback_token){
@@ -61,7 +66,8 @@ function playing(playback_token){
     var i = new Image();
     i.onload = setSwf;
     i.onerror = noSwf;
-    i.src = "https://www.google.com/images/srpr/chrome_ntp_white_logo2.png";
+
+    i.src = "http://www.johnhpanos.com/jpeg.jpg";
 
     // swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
     //     'apiswf', // the ID of the element that will be replaced with the SWF

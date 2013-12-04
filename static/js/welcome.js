@@ -138,7 +138,7 @@ function aPlanet(radius, materials, distFromCenter, angleOfRot, angularSpeed, is
         }
         else{
             var vectora = Math.random();
-            var vectorb = Math.random()*5;
+            var vectorb = vectora * 5;
             this.rotAxis = new THREE.Vector3(vectora, vectorb, 0.1).normalize();
         }
     }

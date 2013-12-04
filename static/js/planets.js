@@ -184,10 +184,9 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
 
 
     this.showOrbitPath = function(){
-        // console.log('showing the orbital path');
         ///makes an ellipse outline
         var geometry = new THREE.Geometry();
-        var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .5, transparent: true} );
+        var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .2, transparent: true} );
         for(var i = 0; i < 360; i++){
             var thetha = i * Math.PI / 180;
             geometry.vertices.push( new THREE.Vector3(this.distFromCenter * 1.5 * Math.cos(thetha), 0,  distFromCenter * Math.sin(thetha))) 
@@ -364,7 +363,7 @@ function main(){
     
     //add avent listener for arrow keys to change camera views
     document.addEventListener('keypress', onKeyPress, false);
-    
+ 
     //render the SCENE
     render();
 }
@@ -387,14 +386,11 @@ var PLANETTEXTURES = [
     ["venusmap.jpg", "venusbump.jpg"],
     ["neptunemap.jpg", "mercurybump.jpg"],
     ["uranusmap.jpg", "venusbump.jpg"],
-    // ["planet7.png", "venusbump.jpg"],
-    // ["planet1.png", "venusbump.jpg"],
-    // ["planet2.png", "venusbump.jpg"],
-    // ["planet3.png", "venusbump.jpg"],
-    // ["planet4.jpg", "venusbump.jpg"],
+    ["planet1.jpeg", "venusbump.jpg"],
+    ["planet2.jpeg", "venusbump.jpg"],
+    ["planet3.jpeg", "venusbump.jpg"],
 ];
 
-// ["moonmap1k.jpg", "moonbump1k.jpg", 0.002],
 var SONGTEXTURES = ["earthmap1k.jpg", "earthbump1k.jpg"];
 
 
@@ -410,7 +406,6 @@ var COUNTER = 0;
 var HIGHLIGHT = false;
 
 
-// var result1 = $.get('/get_music_collection', importMusic);
 $.get('/get_music_collection', resultsReturned1);
 
 var COUNT = 0;
