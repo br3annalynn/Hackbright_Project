@@ -1,6 +1,14 @@
 {% extends 'main.html' %}
 
     {% block body %}
+    <div class="top-navBar">
+        <div class="top-navs"><a class="nav-buttons" href="/">home</a></div>
+        <div class="top-navs"><a class="nav-buttons" href="{{url_for("login")}}">login</a></div>
+        <div class="top-navs"><a class="nav-buttons" href="{{url_for("show_planets")}}">demo</a></div>
+    </div>
+    <div>
+        <h1 class="coming-soon">Coming Soon!</h1>
+    </div>
     <form class="signin"  action="{{url_for("register_user")}}" method='POST'>
         <h2 class="signin-heading">Register a new account</h2>
 
