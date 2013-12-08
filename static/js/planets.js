@@ -186,7 +186,7 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
     this.showOrbitPath = function(){
         ///makes an ellipse outline
         var geometry = new THREE.Geometry();
-        var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .2, transparent: true} );
+        var material = new THREE.LineBasicMaterial( { color: 0x666666, opacity: .3, transparent: true} );
         for(var i = 0; i < 360; i++){
             var thetha = i * Math.PI / 180;
             geometry.vertices.push( new THREE.Vector3(this.distFromCenter * 1.5 * Math.cos(thetha), 0,  distFromCenter * Math.sin(thetha))) 
@@ -200,9 +200,8 @@ function aPlanet(radius, materials, distFromCenter, angularSpeed, isSun, duratio
             this.rotAxis = new THREE.Vector3(0, 1, 0);
         }
         else{
-            var vectorAngle = Math.random();
-            var vectora = vectorAngle;
-            var vectorb = vectorAngle * 4;
+            var vectora = Math.random();
+            var vectorb = vectora * 5;
             this.rotAxis = new THREE.Vector3(vectora, vectorb, 0.1).normalize();
             // this.rotAxis = new THREE.Vector3(0, 1, 0);
         }
@@ -244,14 +243,14 @@ function moveCameraToSS(currentSolarSystem, out){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.00008;
+        COUNTER = COUNTER + 0.00005;
     }
 
     if(CAMERA.position.distanceTo(toLocation) < 8000 && CAMERA.position.distanceTo(toLocation) > 0){
         CAMERA.position.x = CAMERA.position.x + directVector.x * COUNTER;
         CAMERA.position.y = CAMERA.position.y + directVector.y * COUNTER;
         CAMERA.position.z = CAMERA.position.z + directVector.z * COUNTER;
-        COUNTER = COUNTER + 0.00008/(8000.009 - CAMERA.position.distanceTo(toLocation));
+        COUNTER = COUNTER + 0.00005/(8000.009 - CAMERA.position.distanceTo(toLocation));
     }
 }
 

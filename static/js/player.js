@@ -24,12 +24,12 @@ THE SOFTWARE.
 var apiswf = null;
 
 //playback token and domain for heroku
-var domain = "space-james.herokuapp.com";
-var playback_token = 'GBlSnnLkAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNwYWNlLWphbWVzLmhlcm9rdWFwcC5jb21qxunLNj4vuIdykkRblEa2';
+// var domain = "space-james.herokuapp.com";
+// var playback_token = 'GBlSnnLkAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNwYWNlLWphbWVzLmhlcm9rdWFwcC5jb21qxunLNj4vuIdykkRblEa2';
 
 //playback token and domain for localhost
-// var domain = 'localhost';
-// var playback_token = 'GAlSlUTmAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTb13eqrog6UaDbCL0fjP4=';
+var domain = 'localhost';
+var playback_token = 'GAlSlUTmAPdxb2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbmxvY2FsaG9zdGTb13eqrog6UaDbCL0fjP4=';
 
 // var playback_token = $.get('/get_token', playing);
 var CURRENTPLAYED = false;
